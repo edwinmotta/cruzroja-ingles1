@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Pronouns Master - Academia Interactiva</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        },
+                        subject: '#3b82f6',
+                        object: '#ec4899',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            user-select: none;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glow-subject {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.35);
+        }
+        .glow-plural {
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.35);
+        }
+        .animated-gradient-text {
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden">
+
+    <!-- Encabezado Principal -->
+    <header class="sticky top-0 z-40 glass-card border-b border-slate-700/60 px-4 py-3 sm:px-8">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+            
+            <!-- Logo & Titulo -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('dashboard')">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 via-indigo-500 to-pink-500 flex items-center justify-center font-black text-xl text-white shadow-lg">
+                    🔤
+                </div>
+                <div>
+                    <h1 class="text-lg sm:text-xl font-extrabold tracking-tight font-display animated-gradient-text">
+                        PRONOUN MASTER
+                    </h1>
+                    <p class="text-xs text-slate-400 font-medium">Pronombres de Sujeto en Inglés (Subject Pronouns)</p>
+                </div>
+            </div>
+
+            <!-- Stats & XP -->
+            <div class="flex items-center space-x-3 bg-slate-900/90 px-4 py-2 rounded-2xl border border-slate-700">
+                <div class="flex items-center space-x-1.5">
+                    <span class="text-amber-400">⚡</span>
+                    <span id="xp-counter" class="text-xs font-bold text-amber-300">0 XP</span>
+                </div>
+                <div class="h-4 w-[1px] bg-slate-700"></div>
+                <div class="flex items-center space-x-1.5">
+                    <span class="text-rose-400">🔥</span>
+                    <span id="streak-counter" class="text-xs font-bold text-rose-300">0 Racha</span>
+                </div>
+                <div class="h-4 w-[1px] bg-slate-700"></div>
+                <button onclick="toggleModal('guide-modal')" class="px-3 py-1 bg-indigo-600/40 hover:bg-indigo-600/60 text-indigo-200 text-xs font-semibold rounded-lg border border-indigo-500/40 transition flex items-center space-x-1">
+                    <span>📚</span>
+                    <span class="hidden sm:inline">Guía de Pronombres</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 md:p-8">
+        
+        <!-- ================= VISTA 0: DASHBOARD / MENÚ DE EJERCICIOS ================= -->
+        <section id="view-dashboard" class="space-y-8 animate-fade-in">
+            <!-- Hero Banner -->
+            <div class="glass-card rounded-3xl p-6 sm:p-10 relative overflow-hidden border border-slate-700/80">
+                <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="max-w-2xl">
+                    <span class="px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/30 text-sky-400 text-xs font-extrabold uppercase tracking-widest">
+                        Nivel Inicial • Subject Pronouns
+                    </span>
+                    <h2 class="text-2xl sm:text-4xl font-black font-display mt-3 text-white leading-tight">
+                        Aprende los Pronombres de Sujeto en Inglés
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base mt-3 leading-relaxed">
+                        Domina el uso de <strong>I, You, He, She, It, We, They</strong>. Practica quién realiza la acción en la oración mediante ejercicios interactivos.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Tarjetas de Ejercicios -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <!-- Ejercicio 1 -->
+                <div class="glass-card rounded-3xl p-6 flex flex-col justify-between hover:border-sky-500/50 transition duration-300 group shadow-lg">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition transform">
+                            🔄
+                        </div>
+                        <span class="text-xs font-bold text-sky-400 uppercase tracking-wider">Ejercicio 1</span>
+                        <h3 class="text-xl font-bold font-display text-white mt-1">Sustitución de Sujeto</h3>
+                        <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                            Reemplaza las personas o cosas entre paréntesis por el pronombre de sujeto correcto (*I, You, He, She, It, We, They*).
+                        </p>
+                    </div>
+                    <button onclick="switchView('ex1')" class="mt-6 w-full py-3 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold text-sm transition shadow-md flex items-center justify-center space-x-2">
+                        <span>Iniciar Práctica</span>
+                        <span>➔</span>
+                    </button>
+                </div>
+
+                <!-- Ejercicio 2 -->
+                <div class="glass-card rounded-3xl p-6 flex flex-col justify-between hover:border-indigo-500/50 transition duration-300 group shadow-lg">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition transform">
+                            ⚖️
+                        </div>
+                        <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider">Ejercicio 2</span>
+                        <h3 class="text-xl font-bold font-display text-white mt-1">¿Singular o Plural?</h3>
+                        <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                            Clasifica rápidamente cada pronombre según si habla de una sola persona/cosa (*Singular*) o de varias (*Plural*).
+                        </p>
+                    </div>
+                    <button onclick="switchView('ex2')" class="mt-6 w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm transition shadow-md flex items-center justify-center space-x-2">
+                        <span>Iniciar Clasificación</span>
+                        <span>➔</span>
+                    </button>
+                </div>
+
+                <!-- Ejercicio 3 -->
+                <div class="glass-card rounded-3xl p-6 flex flex-col justify-between hover:border-purple-500/50 transition duration-300 group shadow-lg">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition transform">
+                            🧩
+                        </div>
+                        <span class="text-xs font-bold text-purple-400 uppercase tracking-wider">Ejercicio 3</span>
+                        <h3 class="text-xl font-bold font-display text-white mt-1">Emparejar Pronombres</h3>
+                        <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                            Relaciona cada pronombre de sujeto en inglés con su significado en español haciendo clic en las parejas correspondientes.
+                        </p>
+                    </div>
+                    <button onclick="switchView('ex3')" class="mt-6 w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-sm transition shadow-md flex items-center justify-center space-x-2">
+                        <span>Iniciar Matching</span>
+                        <span>➔</span>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Resumen Gramatical Rápido -->
+            <div class="glass-card rounded-3xl p-6 border border-slate-700/80">
+                <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-4 flex items-center space-x-2">
+                    <span>💡 REGLA CLAVE DE LOS PRONOMBRES DE SUJETO</span>
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                    <div class="p-4 rounded-2xl bg-sky-950/40 border border-sky-500/30">
+                        <span class="font-extrabold text-sky-400 text-sm block mb-1">Singular (Una persona, animal o cosa)</span>
+                        <p class="text-slate-300">Se usan cuando el sujeto es solo una entidad.</p>
+                        <div class="mt-3 text-slate-300 space-y-1 font-mono">
+                            <div><strong class="text-sky-300">I:</strong> Yo</div>
+                            <div><strong class="text-sky-300">You:</strong> Tú / Usted</div>
+                            <div><strong class="text-sky-300">He:</strong> Él (un hombre/niño)</div>
+                            <div><strong class="text-sky-300">She:</strong> Ella (una mujer/niña)</div>
+                            <div><strong class="text-sky-300">It:</strong> Eso/Ello (un objeto, animal o lugar)</div>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-purple-950/40 border border-purple-500/30">
+                        <span class="font-extrabold text-purple-400 text-sm block mb-1">Plural (Dos o más personas o cosas)</span>
+                        <p class="text-slate-300">Se usan cuando el sujeto abarca a más de uno.</p>
+                        <div class="mt-3 text-slate-300 space-y-1 font-mono">
+                            <div><strong class="text-purple-300">We:</strong> Nosotros / Nosotras (incluye a yo)</div>
+                            <div><strong class="text-purple-300">You:</strong> Ustedes / Vosotros (varias personas)</div>
+                            <div><strong class="text-purple-300">They:</strong> Ellos / Ellas (varios hombres, mujeres, animales o cosas)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= VISTA 1: EJERCICIO 1 (SUSTITUCIÓN) ================= -->
+        <section id="view-ex1" class="hidden space-y-6">
+            <!-- Barra Superior del Ejercicio -->
+            <div class="flex items-center justify-between">
+                <button onclick="switchView('dashboard')" class="text-xs text-slate-400 hover:text-white transition flex items-center space-x-1 font-bold">
+                    <span>← Volver al Menú</span>
+                </button>
+                <div class="flex items-center space-x-2">
+                    <span class="text-xs text-slate-400 font-bold">Progreso:</span>
+                    <span id="ex1-progress-text" class="text-xs text-sky-400 font-mono font-bold">1 / 8</span>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-3xl p-6 sm:p-8 max-w-3xl mx-auto border border-sky-500/30">
+                <!-- Header del Ejercicio -->
+                <div class="flex items-center justify-between mb-6 border-b border-slate-700/60 pb-4">
+                    <div>
+                        <span class="text-xs font-bold text-sky-400 uppercase tracking-widest block">Ejercicio 1</span>
+                        <h3 class="text-xl font-bold text-white">Sustituye por el Pronombre de Sujeto Correcto</h3>
+                    </div>
+                    <button id="ex1-audio-btn" onclick="speakCurrentSentence('ex1')" class="p-3 bg-sky-950 hover:bg-sky-900 border border-sky-500/40 rounded-xl text-sky-400 hover:text-white transition shadow-md" title="Escuchar pronunciación">
+                        🔊
+                    </button>
+                </div>
+
+                <!-- Oración Objetivo -->
+                <div class="my-8 text-center bg-slate-900/90 p-6 sm:p-8 rounded-2xl border border-slate-700">
+                    <p class="text-slate-400 text-xs uppercase tracking-wider mb-2">Reemplaza el sujeto subrayado:</p>
+                    <div id="ex1-sentence-box" class="text-lg sm:text-2xl font-semibold text-white leading-relaxed">
+                        <!-- Se inserta dinámicamente -->
+                    </div>
+                    <div id="ex1-translation" class="text-xs sm:text-sm text-slate-400 mt-3 italic">
+                        <!-- Traducción -->
+                    </div>
+                </div>
+
+                <!-- Opciones de Respuesta -->
+                <div id="ex1-options" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <!-- Botones insertados por JS -->
+                </div>
+
+                <!-- Caja de Retroalimentación -->
+                <div id="ex1-feedback" class="mt-6 p-4 rounded-2xl hidden border transition-all text-sm">
+                    <!-- Retroalimentación dinámica -->
+                </div>
+
+                <!-- Botón Siguiente -->
+                <button id="ex1-next-btn" onclick="nextEx1Question()" class="mt-6 w-full py-3.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold text-sm shadow-lg transition hidden">
+                    Siguiente Oración ➔
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= VISTA 2: EJERCICIO 2 (CLASIFICADOR VELOZ) ================= -->
+        <section id="view-ex2" class="hidden space-y-6">
+            <div class="flex items-center justify-between">
+                <button onclick="switchView('dashboard')" class="text-xs text-slate-400 hover:text-white transition flex items-center space-x-1 font-bold">
+                    <span>← Volver al Menú</span>
+                </button>
+                <div class="flex items-center space-x-3">
+                    <span class="text-xs text-slate-400 font-bold">Puntuación: <span id="ex2-score" class="text-indigo-400 font-mono">0</span></span>
+                    <span class="text-xs text-slate-400 font-bold">Aciertos: <span id="ex2-streak" class="text-emerald-400 font-mono">0</span></span>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-3xl p-6 sm:p-8 max-w-4xl mx-auto border border-indigo-500/30 text-center">
+                <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest block mb-1">Ejercicio 2</span>
+                <h3 class="text-xl font-bold text-white mb-2">Clasificador: ¿Singular o Plural?</h3>
+                <p class="text-xs text-slate-300 mb-6">Haz clic en la categoría correcta según el número de personas o cosas que representa el pronombre.</p>
+
+                <!-- Tarjeta del Pronombre Actual -->
+                <div class="my-6 max-w-sm mx-auto bg-slate-900/90 p-8 rounded-3xl border-2 border-indigo-500/50 shadow-2xl relative">
+                    <span class="text-xs text-slate-400 block mb-2 font-mono">Pronombre:</span>
+                    <h2 id="ex2-current-card" class="text-4xl sm:text-5xl font-black font-display text-white tracking-wide">
+                        YOU
+                    </h2>
+                    <p id="ex2-hint" class="text-xs text-slate-400 mt-3 italic">
+                        "Significado..."
+                    </p>
+                </div>
+
+                <!-- Botones de Categorías -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto mt-8">
+                    
+                    <button onclick="classifyEx2('singular')" class="p-6 rounded-2xl bg-sky-950/60 hover:bg-sky-900/80 border-2 border-sky-500/60 hover:border-sky-400 transition transform active:scale-95 group text-left">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl">👤</span>
+                            <span class="text-xs font-mono text-sky-400">1 Solo elemento</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-white mt-2 group-hover:text-sky-300">SINGULAR</h4>
+                        <p class="text-xs text-slate-300 mt-1">Una sola persona, animal o cosa (I, You, He, She, It)</p>
+                    </button>
+
+                    <button onclick="classifyEx2('plural')" class="p-6 rounded-2xl bg-purple-950/60 hover:bg-purple-900/80 border-2 border-purple-500/60 hover:border-purple-400 transition transform active:scale-95 group text-left">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl">👥</span>
+                            <span class="text-xs font-mono text-purple-400">2 o más elementos</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-white mt-2 group-hover:text-purple-300">PLURAL</h4>
+                        <p class="text-xs text-slate-300 mt-1">Dos o más personas o cosas (We, You, They)</p>
+                    </button>
+                </div>
+
+                <!-- Caja de Retroalimentación del Ejercicio 2 -->
+                <div id="ex2-feedback" class="mt-6 p-4 rounded-2xl hidden border transition-all text-sm"></div>
+            </div>
+        </section>
+
+        <!-- ================= VISTA 3: EJERCICIO 3 (MATCHING DE PRONOMBRES) ================= -->
+        <section id="view-ex3" class="hidden space-y-6">
+            <div class="flex items-center justify-between">
+                <button onclick="switchView('dashboard')" class="text-xs text-slate-400 hover:text-white transition flex items-center space-x-1 font-bold">
+                    <span>← Volver al Menú</span>
+                </button>
+                <div class="flex items-center space-x-3">
+                    <span class="text-xs text-slate-400 font-bold">Parejas encontradas: <span id="ex3-matches-count" class="text-purple-400 font-mono font-bold">0 / 7</span></span>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-3xl p-6 sm:p-10 max-w-4xl mx-auto border border-purple-500/30">
+                <div class="flex items-center justify-between mb-6 border-b border-slate-700/60 pb-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-xl">
+                            🧩
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold text-purple-400 uppercase tracking-widest block">Ejercicio 3</span>
+                            <h3 class="text-xl font-bold text-white">Relaciona Inglés con Español</h3>
+                        </div>
+                    </div>
+                    <button onclick="resetEx3Matching()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs border border-slate-700 transition flex items-center space-x-1.5">
+                        <span>🔄</span>
+                        <span>Mezclar de Nuevo</span>
+                    </button>
+                </div>
+
+                <p class="text-xs text-slate-300 mb-6 leading-relaxed">
+                    Haz clic en un pronombre en <strong>Inglés</strong> y luego en su significado correspondiente en <strong>Español</strong> para unir la pareja.
+                </p>
+
+                <!-- Grid de Columnas para Matching -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 my-6">
+                    <!-- Columna Inglés -->
+                    <div class="space-y-3">
+                        <h4 class="text-xs font-bold text-sky-400 uppercase tracking-wider text-center mb-3">🇺🇸 Pronombres en Inglés</h4>
+                        <div id="ex3-english-col" class="space-y-2.5">
+                            <!-- Dinámico -->
+                        </div>
+                    </div>
+
+                    <!-- Columna Español -->
+                    <div class="space-y-3">
+                        <h4 class="text-xs font-bold text-emerald-400 uppercase tracking-wider text-center mb-3">🇪🇸 Significado en Español</h4>
+                        <div id="ex3-spanish-col" class="space-y-2.5">
+                            <!-- Dinámico -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resultado del Matching -->
+                <div id="ex3-result-box" class="mt-6 p-6 rounded-2xl hidden glass-card border border-purple-500/50 text-center space-y-3">
+                    <!-- Dinámico -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL GUÍA DE ESTUDIO (CHEAT SHEET) -->
+    <div id="guide-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
+        <div class="glass-card max-w-3xl w-full p-6 sm:p-8 rounded-3xl border border-indigo-500/40 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="toggleModal('guide-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl font-bold p-2">✕</button>
+
+            <h3 class="text-xl sm:text-2xl font-black font-display animated-gradient-text mb-2">
+                📖 Tabla de Pronombres de Sujeto (Subject Pronouns)
+            </h3>
+            <p class="text-xs text-slate-300 mb-6">
+                Los pronombres de sujeto van <strong>antes del verbo</strong> e indican quién o qué realiza la acción.
+            </p>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-700 text-indigo-300 uppercase font-bold tracking-wider">
+                            <th class="p-3">Pronombre</th>
+                            <th class="p-3">Significado</th>
+                            <th class="p-3">Número</th>
+                            <th class="p-3">Uso / Ejemplo</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800 text-slate-300">
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="p-3 font-bold text-sky-400 text-base">I</td>
+                            <td class="p-3 font-semibold">Yo</td>
+                            <td class="p-3 text-slate-400">Singular</td>
+                            <td class="p-3 text-slate-400">Hablas de ti mismo: <em><strong>I</strong> like pizza.</em></td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="p-3 font-bold text-sky-400 text-base">You</td>
+                            <td class="p-3 font-semibold">Tú / Usted</td>
+                            <td class="p-3 text-slate-400">Singular</td>
+                            <td class="p-3 text-slate-400">Le hablas a otra persona: <em><strong>You</strong> are nice.</em></td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="p-3 font-bold text-sky-400 text-base">He</td>
+                            <td class="p-3 font-semibold">Él</td>
+                            <td class="p-3 text-slate-400">Singular</td>
+                            <td class="p-3 text-slate-400">Un niño o un hombre: <em><strong>He</strong> plays soccer.</em></td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="p-3 font-bold text-sky-400 text-base">She</td>
+                            <td class="p-3 font-semibold">Ella</td>
+                            <td class="p-3 text-slate-400">Singular</td>
+                            <td class="p-3 text-slate-400">Una niña o una mujer: <em><strong>She</strong> reads books.</em></td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="p-3 font-bold text-sky-400 text-base">It</td>
+                            <td class="p-3 font-semibold">Eso / Ello</td>
+                            <td class="p-3 text-slate-400">Singular</td>
+                            <td class="p-3 text-slate-400">Un objeto, animal o lugar: <em><strong>It</strong> is red.</em></td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="p-3 font-bold text-purple-400 text-base">We</td>
+                            <td class="p-3 font-semibold">Nosotros / -as</td>
+                            <td class="p-3 text-slate-400">Plural</td>
+                            <td class="p-3 text-slate-400">Tú y otras personas: <em><strong>We</strong> are friends.</em></td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="p-3 font-bold text-purple-400 text-base">You</td>
+                            <td class="p-3 font-semibold">Ustedes / Vosotros</td>
+                            <td class="p-3 text-slate-400">Plural</td>
+                            <td class="p-3 text-slate-400">Te diriges a un grupo: <em><strong>You</strong> are a team.</em></td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="p-3 font-bold text-purple-400 text-base">They</td>
+                            <td class="p-3 font-semibold">Ellos / Ellas</td>
+                            <td class="p-3 text-slate-400">Plural</td>
+                            <td class="p-3 text-slate-400">Grupo de personas, cosas o animales: <em><strong>They</strong> run fast.</em></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-6 p-4 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 text-xs text-indigo-200">
+                <span class="font-bold text-amber-300 block mb-1">💡 Regla de Oro:</span>
+                <p class="text-slate-300">
+                    Los pronombres de sujeto van <strong>siempre delante del verbo principal</strong> en las oraciones afirmativas en inglés. Por ejemplo: <em><strong>She</strong> works</em> (Ella trabaja), <em><strong>They</strong> sleep</em> (Ellos duermen).
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="glass-card border-t border-slate-800 py-4 text-center text-xs text-slate-400 mt-8">
+        <p>Plataforma Educativa de Pronombres en Inglés • Diseñado para Estudiantes</p>
+    </footer>
+
+    <script>
+        /* ================= ESTADO GLOBAL ================= */
+        let userStats = {
+            xp: 0,
+            streak: 0,
+            ex1Completed: 0,
+            ex2Score: 0,
+            ex3Score: 0
+        };
+
+        /* ================= SINTETIZADOR DE AUDIO (WEB AUDIO API + TTS) ================= */
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playSfx(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            const now = audioCtx.currentTime;
+
+            if (type === 'correct') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, now);
+                osc.frequency.setValueAtTime(659.25, now + 0.08);
+                osc.frequency.setValueAtTime(783.99, now + 0.16);
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(260, now);
+                osc.frequency.setValueAtTime(180, now + 0.12);
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                osc.start(now);
+                osc.stop(now + 0.25);
+            }
+        }
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function addXP(amount) {
+            userStats.xp += amount;
+            userStats.streak += 1;
+            document.getElementById('xp-counter').textContent = `${userStats.xp} XP`;
+            document.getElementById('streak-counter').textContent = `${userStats.streak} Racha`;
+        }
+
+        function resetStreak() {
+            userStats.streak = 0;
+            document.getElementById('streak-counter').textContent = `0 Racha`;
+        }
+
+        function toggleModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.toggle('hidden');
+        }
+
+        function switchView(viewName) {
+            document.getElementById('view-dashboard').classList.add('hidden');
+            document.getElementById('view-ex1').classList.add('hidden');
+            document.getElementById('view-ex2').classList.add('hidden');
+            document.getElementById('view-ex3').classList.add('hidden');
+
+            if (viewName === 'dashboard') {
+                document.getElementById('view-dashboard').classList.remove('hidden');
+            } else if (viewName === 'ex1') {
+                document.getElementById('view-ex1').classList.remove('hidden');
+                loadEx1Question();
+            } else if (viewName === 'ex2') {
+                document.getElementById('view-ex2').classList.remove('hidden');
+                loadEx2Question();
+            } else if (viewName === 'ex3') {
+                document.getElementById('view-ex3').classList.remove('hidden');
+                loadEx3Matching();
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /* ================= EJERCICIO 1: SUSTITUCIÓN DE SUJETO ================= */
+        const EX1_QUESTIONS = [
+            {
+                sentence: "<u class='text-sky-400 font-bold'>(Maria)</u> lives in London with her family.",
+                translation: "(María) vive en Londres con su familia.",
+                targetWord: "Maria",
+                correct: "She",
+                options: ["She", "He", "They", "It"],
+                explanation: "'Maria' es una persona femenina en singular. El pronombre de sujeto para ella es 'She'."
+            },
+            {
+                sentence: "<u class='text-sky-400 font-bold'>(Carlos)</u> plays soccer every Saturday.",
+                translation: "(Carlos) juega fútbol todos los sábados.",
+                targetWord: "Carlos",
+                correct: "He",
+                options: ["He", "She", "It", "We"],
+                explanation: "'Carlos' es un hombre/niño en singular. El pronombre de sujeto correspondiente es 'He'."
+            },
+            {
+                sentence: "<u class='text-sky-400 font-bold'>(The dog)</u> is barking loudly in the garden.",
+                translation: "(El perro) está ladrando fuerte en el jardín.",
+                targetWord: "The dog",
+                correct: "It",
+                options: ["He", "It", "They", "We"],
+                explanation: "Para referirnos a un animal u objeto en singular usamos el pronombre 'It'."
+            },
+            {
+                sentence: "<u class='text-sky-400 font-bold'>(John and Sarah)</u> are studying for the test.",
+                translation: "(John y Sarah) están estudiando para el examen.",
+                targetWord: "John and Sarah",
+                correct: "They",
+                options: ["We", "They", "He", "You"],
+                explanation: "'John and Sarah' representan a varias personas (ellos/ellas). Usamos 'They'."
+            },
+            {
+                sentence: "<u class='text-sky-400 font-bold'>(My sister and I)</u> love listening to music.",
+                translation: "(Mi hermana y yo) amamos escuchar música.",
+                targetWord: "My sister and I",
+                correct: "We",
+                options: ["We", "They", "You", "I"],
+                explanation: "Cualquier grupo que incluya a 'I' (yo) se convierte en 'Nosotros/Nosotras', por lo tanto usamos 'We'."
+            },
+            {
+                sentence: "<u class='text-sky-400 font-bold'>(The book)</u> is on the wooden table.",
+                translation: "(El libro) está sobre la mesa de madera.",
+                targetWord: "The book",
+                correct: "It",
+                options: ["It", "They", "He", "She"],
+                explanation: "'The book' es un objeto en singular. Usamos 'It'."
+            },
+            {
+                sentence: "<u class='text-sky-400 font-bold'>(The cars)</u> are fast and expensive.",
+                translation: "(Los autos) son rápidos y costosos.",
+                targetWord: "The cars",
+                correct: "They",
+                options: ["It", "They", "We", "You"],
+                explanation: "Aunque son cosas, están en plural (los autos). En plural siempre usamos 'They'."
+            },
+            {
+                sentence: "<u class='text-sky-400 font-bold'>(You and Tom)</u> are very good students.",
+                translation: "(Tú y Tom) son muy buenos estudiantes.",
+                targetWord: "You and Tom",
+                correct: "You",
+                options: ["We", "You", "They", "He"],
+                explanation: "'Tú y otra persona' corresponde a 'Ustedes' (You en plural)."
+            }
+        ];
+
+        let ex1Index = 0;
+
+        function loadEx1Question() {
+            const q = EX1_QUESTIONS[ex1Index];
+            document.getElementById('ex1-progress-text').textContent = `${ex1Index + 1} / ${EX1_QUESTIONS.length}`;
+            document.getElementById('ex1-sentence-box').innerHTML = q.sentence;
+            document.getElementById('ex1-translation').textContent = q.translation;
+
+            const feedbackEl = document.getElementById('ex1-feedback');
+            feedbackEl.classList.add('hidden');
+            document.getElementById('ex1-next-btn').classList.add('hidden');
+
+            const optionsContainer = document.getElementById('ex1-options');
+            optionsContainer.innerHTML = '';
+
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'py-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-bold text-base transition transform active:scale-95 shadow-md';
+                btn.textContent = opt;
+                btn.onclick = () => checkEx1Answer(opt, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkEx1Answer(selectedOption, btnElement) {
+            const q = EX1_QUESTIONS[ex1Index];
+            const feedbackEl = document.getElementById('ex1-feedback');
+            const allBtns = document.querySelectorAll('#ex1-options button');
+            
+            allBtns.forEach(b => b.disabled = true);
+
+            if (selectedOption === q.correct) {
+                playSfx('correct');
+                addXP(15);
+                btnElement.className = 'py-3 rounded-xl bg-emerald-600 border-2 border-emerald-300 text-white font-black text-base shadow-lg';
+                feedbackEl.className = 'mt-6 p-4 rounded-2xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-200 text-xs block';
+                feedbackEl.innerHTML = `<strong>¡Correcto! 🎉</strong><br>${q.explanation}`;
+            } else {
+                playSfx('wrong');
+                resetStreak();
+                btnElement.className = 'py-3 rounded-xl bg-rose-600 border-2 border-rose-300 text-white font-black text-base shadow-lg';
+                feedbackEl.className = 'mt-6 p-4 rounded-2xl bg-rose-950/60 border border-rose-500/40 text-rose-200 text-xs block';
+                feedbackEl.innerHTML = `<strong>Respuesta incorrecta ❌</strong><br>La respuesta correcta era <strong>${q.correct}</strong>.<br>${q.explanation}`;
+            }
+
+            document.getElementById('ex1-next-btn').classList.remove('hidden');
+        }
+
+        function nextEx1Question() {
+            ex1Index = (ex1Index + 1) % EX1_QUESTIONS.length;
+            loadEx1Question();
+        }
+
+        function speakCurrentSentence(ex) {
+            if (ex === 'ex1') {
+                const rawText = EX1_QUESTIONS[ex1Index].sentence.replace(/<[^>]*>/g, '');
+                speakText(rawText);
+            }
+        }
+
+        /* ================= EJERCICIO 2: CLASIFICADOR (SINGULAR VS PLURAL) ================= */
+        const EX2_CARDS = [
+            { word: "HE", type: "singular", hint: "Él (1 persona masculina)" },
+            { word: "WE", type: "plural", hint: "Nosotros/Nosotras (varias personas incluyéndote)" },
+            { word: "SHE", type: "singular", hint: "Ella (1 persona femenina)" },
+            { word: "THEY", type: "plural", hint: "Ellos/Ellas (grupo de personas o cosas)" },
+            { word: "IT", type: "singular", hint: "Eso/Ello (1 objeto, animal o lugar)" },
+            { word: "I", type: "singular", hint: "Yo (1 sola persona)" },
+            { word: "YOU (Ustedes)", type: "plural", hint: "Ustedes (varias personas a las que hablas)" },
+            { word: "YOU (Tú)", type: "singular", hint: "Tú / Usted (1 sola persona a la que hablas)" }
+        ];
+
+        let ex2CurrentIndex = 0;
+        let ex2Score = 0;
+        let ex2Streak = 0;
+
+        function loadEx2Question() {
+            const card = EX2_CARDS[ex2CurrentIndex];
+            document.getElementById('ex2-current-card').textContent = card.word;
+            document.getElementById('ex2-hint').textContent = `Significado: ${card.hint}`;
+            document.getElementById('ex2-feedback').classList.add('hidden');
+        }
+
+        function classifyEx2(userChoice) {
+            const card = EX2_CARDS[ex2CurrentIndex];
+            const isCorrect = (userChoice === card.type);
+            const feedbackEl = document.getElementById('ex2-feedback');
+            
+            feedbackEl.classList.remove('hidden');
+
+            if (isCorrect) {
+                playSfx('correct');
+                ex2Score += 20;
+                ex2Streak += 1;
+                addXP(10);
+                feedbackEl.className = 'mt-6 p-4 rounded-2xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-200 text-xs block max-w-2xl mx-auto';
+                feedbackEl.innerHTML = `<strong>¡Excelente! ✨</strong> <strong>${card.word}</strong> es un pronombre <strong>${userChoice.toUpperCase()}</strong>.`;
+            } else {
+                playSfx('wrong');
+                ex2Streak = 0;
+                resetStreak();
+                feedbackEl.className = 'mt-6 p-4 rounded-2xl bg-rose-950/60 border border-rose-500/40 text-rose-200 text-xs block max-w-2xl mx-auto';
+                feedbackEl.innerHTML = `<strong>Incorrecto ❌</strong> <strong>${card.word}</strong> representa un pronombre <strong>${card.type.toUpperCase()}</strong>.`;
+            }
+
+            document.getElementById('ex2-score').textContent = ex2Score;
+            document.getElementById('ex2-streak').textContent = ex2Streak;
+
+            setTimeout(() => {
+                ex2CurrentIndex = (ex2CurrentIndex + 1) % EX2_CARDS.length;
+                loadEx2Question();
+            }, 1200);
+        }
+
+        /* ================= EJERCICIO 3: MATCHING / EMPAREJAR PRONOMBRES ================= */
+        const EX3_PAIRS = [
+            { id: 'p1', en: 'I', es: 'Yo' },
+            { id: 'p2', en: 'You (Singular)', es: 'Tú / Usted' },
+            { id: 'p3', en: 'He', es: 'Él' },
+            { id: 'p4', en: 'She', es: 'Ella' },
+            { id: 'p5', en: 'It', es: 'Eso / Ello (Cosa/Animal)' },
+            { id: 'p6', en: 'We', es: 'Nosotros / Nosotras' },
+            { id: 'p7', en: 'They', es: 'Ellos / Ellas' }
+        ];
+
+        let ex3SelectedEn = null;
+        let ex3SelectedEs = null;
+        let ex3MatchedIds = new Set();
+        let ex3ShuffledEn = [];
+        let ex3ShuffledEs = [];
+
+        function shuffleArray(arr) {
+            return [...arr].sort(() => Math.random() - 0.5);
+        }
+
+        function loadEx3Matching() {
+            ex3SelectedEn = null;
+            ex3SelectedEs = null;
+            ex3MatchedIds.clear();
+            
+            ex3ShuffledEn = shuffleArray(EX3_PAIRS);
+            ex3ShuffledEs = shuffleArray(EX3_PAIRS);
+
+            document.getElementById('ex3-result-box').classList.add('hidden');
+            renderEx3Columns();
+        }
+
+        function renderEx3Columns() {
+            const enCol = document.getElementById('ex3-english-col');
+            const esCol = document.getElementById('ex3-spanish-col');
+
+            enCol.innerHTML = '';
+            esCol.innerHTML = '';
+
+            document.getElementById('ex3-matches-count').textContent = `${ex3MatchedIds.size} / ${EX3_PAIRS.length}`;
+
+            // Renderizar items en Inglés
+            ex3ShuffledEn.forEach(item => {
+                const isMatched = ex3MatchedIds.has(item.id);
+                const isSelected = ex3SelectedEn === item.id;
+
+                const btn = document.createElement('button');
+                btn.disabled = isMatched;
+
+                let baseClasses = 'w-full p-4 rounded-2xl font-bold text-sm sm:text-base flex items-center justify-between border transition transform active:scale-95 shadow-md ';
+
+                if (isMatched) {
+                    baseClasses += 'bg-slate-900/40 border-emerald-500/40 text-emerald-400 opacity-60 cursor-not-allowed';
+                } else if (isSelected) {
+                    baseClasses += 'bg-sky-600 border-2 border-sky-300 text-white shadow-sky-500/20 scale-[1.02]';
+                } else {
+                    baseClasses += 'bg-slate-800 hover:bg-slate-700/80 border-slate-700 text-white hover:border-sky-500/50';
+                }
+
+                btn.className = baseClasses;
+                btn.innerHTML = `<span>${item.en}</span> <span>${isMatched ? '✅' : '👉'}</span>`;
+                btn.onclick = () => selectEx3En(item.id);
+                enCol.appendChild(btn);
+            });
+
+            // Renderizar items en Español
+            ex3ShuffledEs.forEach(item => {
+                const isMatched = ex3MatchedIds.has(item.id);
+                const isSelected = ex3SelectedEs === item.id;
+
+                const btn = document.createElement('button');
+                btn.disabled = isMatched;
+
+                let baseClasses = 'w-full p-4 rounded-2xl font-bold text-sm sm:text-base flex items-center justify-between border transition transform active:scale-95 shadow-md ';
+
+                if (isMatched) {
+                    baseClasses += 'bg-slate-900/40 border-emerald-500/40 text-emerald-400 opacity-60 cursor-not-allowed';
+                } else if (isSelected) {
+                    baseClasses += 'bg-emerald-600 border-2 border-emerald-300 text-white shadow-emerald-500/20 scale-[1.02]';
+                } else {
+                    baseClasses += 'bg-slate-800 hover:bg-slate-700/80 border-slate-700 text-white hover:border-emerald-500/50';
+                }
+
+                btn.className = baseClasses;
+                btn.innerHTML = `<span>${isMatched ? '✅' : '👈'}</span> <span>${item.es}</span>`;
+                btn.onclick = () => selectEx3Es(item.id);
+                esCol.appendChild(btn);
+            });
+        }
+
+        function selectEx3En(id) {
+            if (ex3MatchedIds.has(id)) return;
+            ex3SelectedEn = id;
+            renderEx3Columns();
+            checkEx3Match();
+        }
+
+        function selectEx3Es(id) {
+            if (ex3MatchedIds.has(id)) return;
+            ex3SelectedEs = id;
+            renderEx3Columns();
+            checkEx3Match();
+        }
+
+        function checkEx3Match() {
+            if (ex3SelectedEn && ex3SelectedEs) {
+                if (ex3SelectedEn === ex3SelectedEs) {
+                    // Pareja Correcta
+                    playSfx('correct');
+                    addXP(15);
+                    ex3MatchedIds.add(ex3SelectedEn);
+                    ex3SelectedEn = null;
+                    ex3SelectedEs = null;
+                    renderEx3Columns();
+
+                    if (ex3MatchedIds.size === EX3_PAIRS.length) {
+                        finishEx3Matching();
+                    }
+                } else {
+                    // Pareja Incorrecta
+                    playSfx('wrong');
+                    resetStreak();
+                    setTimeout(() => {
+                        ex3SelectedEn = null;
+                        ex3SelectedEs = null;
+                        renderEx3Columns();
+                    }, 400);
+                }
+            }
+        }
+
+        function finishEx3Matching() {
+            addXP(30);
+            const resultBox = document.getElementById('ex3-result-box');
+            resultBox.classList.remove('hidden');
+            resultBox.innerHTML = `
+                <div class="text-2xl font-black text-purple-300">¡Excelente Trabajo! 🎉</div>
+                <p class="text-sm text-slate-200">Has relacionado correctamente todos los pronombres de sujeto en inglés con su significado en español.</p>
+                <button onclick="resetEx3Matching()" class="mt-3 px-6 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-lg transition">
+                    Jugar de Nuevo
+                </button>
+            `;
+        }
+
+        function resetEx3Matching() {
+            loadEx3Matching();
+        }
+
+        window.onload = function() {
+            switchView('dashboard');
+        };
+    </script>
+</body>
+</html>
