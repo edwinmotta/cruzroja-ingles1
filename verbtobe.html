@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verb To Be & Professions - Academia Interactiva</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #0b1329;
+            color: #f8fafc;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            user-select: none;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.75);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        .animated-gradient-text {
+            background: linear-gradient(135deg, #38bdf8 0%, #34d399 50%, #a7f3d0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glow-emerald {
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.3);
+        }
+        .glow-sky {
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.3);
+        }
+        /* Custom scrollbars */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden">
+
+    <!-- Encabezado Principal -->
+    <header class="sticky top-0 z-40 glass-card border-b border-slate-700/60 px-4 py-3 sm:px-8">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+            
+            <!-- Logo & Título -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('dashboard')">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-sky-500 flex items-center justify-center font-black text-2xl text-white shadow-lg">
+                    🏥
+                </div>
+                <div>
+                    <h1 class="text-lg sm:text-xl font-extrabold tracking-tight font-display animated-gradient-text">
+                        HEALTHCARE TO BE ACADEMY
+                    </h1>
+                    <p class="text-xs text-slate-400 font-medium">Pronombre + Verbo To Be + Sector Salud</p>
+                </div>
+            </div>
+
+            <!-- Stats & XP -->
+            <div class="flex items-center space-x-3 bg-slate-900/90 px-4 py-2 rounded-2xl border border-slate-700">
+                <div class="flex items-center space-x-1.5">
+                    <span class="text-amber-400">⚡</span>
+                    <span id="xp-counter" class="text-xs font-bold text-amber-300">0 XP</span>
+                </div>
+                <div class="h-4 w-[1px] bg-slate-700"></div>
+                <div class="flex items-center space-x-1.5">
+                    <span class="text-rose-400">🔥</span>
+                    <span id="streak-counter" class="text-xs font-bold text-rose-300">0 Racha</span>
+                </div>
+                <div class="h-4 w-[1px] bg-slate-700"></div>
+                <button onclick="toggleModal('guide-modal')" class="px-3 py-1 bg-emerald-600/40 hover:bg-emerald-600/60 text-emerald-200 text-xs font-semibold rounded-lg border border-emerald-500/40 transition flex items-center space-x-1">
+                    <span>📚</span>
+                    <span class="hidden sm:inline">Tabla de Reglas</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 md:p-8">
+        
+        <!-- ================= VISTA 0: DASHBOARD / MENÚ PRINCIPAL ================= -->
+        <section id="view-dashboard" class="space-y-8 animate-fade-in">
+            <!-- Hero Banner -->
+            <div class="glass-card rounded-3xl p-6 sm:p-10 relative overflow-hidden border border-slate-700/80">
+                <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="max-w-2xl">
+                    <span class="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-extrabold uppercase tracking-widest">
+                        Vocabulario Médico y Salud • Verb To Be
+                    </span>
+                    <h2 class="text-2xl sm:text-4xl font-black font-display mt-3 text-white leading-tight">
+                        Aprende Inglés para el <span class="text-emerald-400">Sector Salud y Hospitalario</span>
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base mt-3 leading-relaxed">
+                        Práctica oraciones asociando el personal médico y pacientes (<em>physician, registered nurse, nursing assistant, patient, relative, family member...</em>) con la concordancia gramatical correcta del verbo <em>To Be</em>.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Tarjetas de Módulos de Práctica -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <!-- Módulo 1: Triple Matching -->
+                <div class="glass-card rounded-3xl p-6 flex flex-col justify-between hover:border-emerald-500/50 transition duration-300 group shadow-lg">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition transform">
+                            🔗
+                        </div>
+                        <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Módulo 1</span>
+                        <h3 class="text-xl font-bold font-display text-white mt-1">Emparejamiento en 3 Columnas</h3>
+                        <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                            Conecta en secuencia: <strong>Pronombre ➔ Conjugación To Be ➔ Profesión</strong> para formar la combinación perfecta.
+                        </p>
+                    </div>
+                    <button onclick="switchView('ex1')" class="mt-6 w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm transition shadow-md flex items-center justify-center space-x-2">
+                        <span>Iniciar Matching</span>
+                        <span>➔</span>
+                    </button>
+                </div>
+
+                <!-- Módulo 2: Complete Sentence Builder -->
+                <div class="glass-card rounded-3xl p-6 flex flex-col justify-between hover:border-sky-500/50 transition duration-300 group shadow-lg">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition transform">
+                            🏗️
+                        </div>
+                        <span class="text-xs font-bold text-sky-400 uppercase tracking-wider">Módulo 2</span>
+                        <h3 class="text-xl font-bold font-display text-white mt-1">Constructor de Oraciones</h3>
+                        <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                            Observa la imagen del profesional, selecciona la conjugación y la profesión correspondiente en inglés.
+                        </p>
+                    </div>
+                    <button onclick="switchView('ex2')" class="mt-6 w-full py-3 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold text-sm transition shadow-md flex items-center justify-center space-x-2">
+                        <span>Construir Oraciones</span>
+                        <span>➔</span>
+                    </button>
+                </div>
+
+                <!-- Módulo 3: Detector Gramatical -->
+                <div class="glass-card rounded-3xl p-6 flex flex-col justify-between hover:border-purple-500/50 transition duration-300 group shadow-lg">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition transform">
+                            ⚡
+                        </div>
+                        <span class="text-xs font-bold text-purple-400 uppercase tracking-wider">Módulo 3</span>
+                        <h3 class="text-xl font-bold font-display text-white mt-1">Desafío Veloz: ¿Correcto o Incorrecto?</h3>
+                        <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                            Evalúa oraciones rápidamente y decide si respetan la concordancia del verbo <em>To Be</em> y el plural/singular.
+                        </p>
+                    </div>
+                    <button onclick="switchView('ex3')" class="mt-6 w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-sm transition shadow-md flex items-center justify-center space-x-2">
+                        <span>Desafío Veloz</span>
+                        <span>➔</span>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Resumen Gramatical Rápido -->
+            <div class="glass-card rounded-3xl p-6 border border-slate-700/80">
+                <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-4 flex items-center space-x-2">
+                    <span>💡 REGLA GRAMATICAL EN EL ENTORNO SALUD</span>
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="p-4 rounded-2xl bg-sky-950/40 border border-sky-500/30">
+                        <span class="font-extrabold text-sky-400 text-sm block mb-1">AM (Primera Persona Singular)</span>
+                        <p class="text-slate-300">Se usa de forma exclusiva con 'I' + rol singular con artículo <em>a/an</em>.</p>
+                        <p class="mt-2 text-sky-300 font-mono">I + AM + a physician / a registered nurse.</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/30">
+                        <span class="font-extrabold text-emerald-400 text-sm block mb-1">IS (Tercera Persona Singular)</span>
+                        <p class="text-slate-300">Para una sola persona (He / She / It). ¡Usa <strong>a/an</strong> antes del sustantivo!</p>
+                        <p class="mt-2 text-emerald-300 font-mono">She + IS + a nursing assistant / a patient.</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-purple-950/40 border border-purple-500/30">
+                        <span class="font-extrabold text-purple-400 text-sm block mb-1">ARE (Plurales: We / They / You)</span>
+                        <p class="text-slate-300">Para varias personas. ¡Los roles van en <strong>plural (-s / -es)</strong> sin <em>a/an</em>!</p>
+                        <p class="mt-2 text-purple-300 font-mono">They + ARE + relatives / family members.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= VISTA 1: MATCHING EN 3 COLUMNAS ================= -->
+        <section id="view-ex1" class="hidden space-y-6">
+            <div class="flex items-center justify-between">
+                <button onclick="switchView('dashboard')" class="text-xs text-slate-400 hover:text-white transition flex items-center space-x-1 font-bold">
+                    <span>← Volver al Menú</span>
+                </button>
+                <div class="flex items-center space-x-3">
+                    <span class="text-xs text-slate-400 font-bold">Completados: <span id="ex1-completed-count" class="text-emerald-400 font-mono font-bold">0 / 6</span></span>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-3xl p-6 sm:p-8 max-w-5xl mx-auto border border-emerald-500/30">
+                <div class="flex items-center justify-between mb-4 border-b border-slate-700/60 pb-4">
+                    <div>
+                        <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest block">Módulo 1</span>
+                        <h3 class="text-xl font-bold text-white">Relaciona: Pronombre + Verbo To Be + Profesión</h3>
+                    </div>
+                    <button onclick="resetEx1Matching()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs border border-slate-700 transition flex items-center space-x-1.5">
+                        <span>🔄</span>
+                        <span>Reiniciar</span>
+                    </button>
+                </div>
+
+                <p class="text-xs text-slate-300 mb-6 leading-relaxed">
+                    Instrucciones: Selecciona un <strong>Pronombre</strong> de la Columna 1, su conjugación del <strong>Verbo To Be</strong> en la Columna 2, y la <strong>Profesión</strong> adecuada en la Columna 3 para validar el trío.
+                </p>
+
+                <!-- Panel Visual de Selección Actual -->
+                <div class="bg-slate-900/90 p-4 rounded-2xl border border-slate-700 flex flex-wrap items-center justify-between gap-3 mb-6">
+                    <div class="flex items-center space-x-2 text-sm sm:text-base font-bold">
+                        <span class="text-slate-400 text-xs uppercase tracking-wider">Tu selección:</span>
+                        <span id="select-col1" class="px-3 py-1 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-500/40">?</span>
+                        <span class="text-slate-500">+</span>
+                        <span id="select-col2" class="px-3 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">?</span>
+                        <span class="text-slate-500">+</span>
+                        <span id="select-col3" class="px-3 py-1 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/40">?</span>
+                    </div>
+
+                    <button id="btn-verify-triplet" onclick="verifyTriplet()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 text-white font-bold text-xs transition shadow-lg" disabled>
+                        Verificar Trío ➔
+                    </button>
+                </div>
+
+                <!-- Grid de 3 Columnas -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
+                    
+                    <!-- Columna 1: PRONOUNS -->
+                    <div class="space-y-2.5">
+                        <div class="bg-sky-950/60 p-2.5 rounded-xl border border-sky-500/40 text-center font-bold text-sky-300 text-xs uppercase tracking-wider">
+                            1. PRONOUNS (Sujeto)
+                        </div>
+                        <div id="col1-container" class="space-y-2">
+                            <!-- Inyectado por JS -->
+                        </div>
+                    </div>
+
+                    <!-- Columna 2: VERB TO BE -->
+                    <div class="space-y-2.5">
+                        <div class="bg-emerald-950/60 p-2.5 rounded-xl border border-emerald-500/40 text-center font-bold text-emerald-300 text-xs uppercase tracking-wider">
+                            2. VERB TO BE (Verbo)
+                        </div>
+                        <div id="col2-container" class="space-y-2">
+                            <!-- Inyectado por JS -->
+                        </div>
+                    </div>
+
+                    <!-- Columna 3: PROFESSIONS -->
+                    <div class="space-y-2.5">
+                        <div class="bg-purple-950/60 p-2.5 rounded-xl border border-purple-500/40 text-center font-bold text-purple-300 text-xs uppercase tracking-wider">
+                            3. PROFESSIONS (Profesión)
+                        </div>
+                        <div id="col3-container" class="space-y-2">
+                            <!-- Inyectado por JS -->
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Feedback & Audio Player del Módulo 1 -->
+                <div id="ex1-feedback" class="mt-6 p-4 rounded-2xl hidden border text-xs sm:text-sm transition-all flex items-center justify-between">
+                    <div id="ex1-feedback-text"></div>
+                    <button id="ex1-audio-btn" onclick="speakCurrentTriplet()" class="p-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl border border-slate-600 transition flex items-center space-x-1.5 shrink-0 ml-3">
+                        <span>🔊 Escuchar</span>
+                    </button>
+                </div>
+
+                <!-- Resultado Final -->
+                <div id="ex1-success-box" class="mt-6 p-6 rounded-2xl hidden glass-card border border-emerald-500/50 text-center space-y-3">
+                    <div class="text-2xl font-black text-emerald-300">¡Modulo 1 Completado! 🎉</div>
+                    <p class="text-xs sm:text-sm text-slate-200">Has formado y vinculado exitosamente todos los pronombres con sus respectivas conjugaciones y profesiones.</p>
+                    <button onclick="switchView('ex2')" class="mt-2 px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-lg transition">
+                        Ir al Módulo 2 ➔
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= VISTA 2: CONSTRUCTOR DE ORACIONES ================= -->
+        <section id="view-ex2" class="hidden space-y-6">
+            <div class="flex items-center justify-between">
+                <button onclick="switchView('dashboard')" class="text-xs text-slate-400 hover:text-white transition flex items-center space-x-1 font-bold">
+                    <span>← Volver al Menú</span>
+                </button>
+                <div class="flex items-center space-x-2">
+                    <span class="text-xs text-slate-400 font-bold">Progreso:</span>
+                    <span id="ex2-progress-text" class="text-xs text-sky-400 font-mono font-bold">1 / 6</span>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-3xl p-6 sm:p-8 max-w-3xl mx-auto border border-sky-500/30">
+                <div class="flex items-center justify-between mb-4 border-b border-slate-700/60 pb-4">
+                    <div>
+                        <span class="text-xs font-bold text-sky-400 uppercase tracking-widest block">Módulo 2</span>
+                        <h3 class="text-xl font-bold text-white">Completa la Oración Gramatical</h3>
+                    </div>
+                    <button id="ex2-audio-btn" onclick="speakEx2Sentence()" class="p-2.5 bg-sky-950 hover:bg-sky-900 border border-sky-500/40 rounded-xl text-sky-300 hover:text-white transition text-xs font-semibold flex items-center space-x-1">
+                        <span>🔊 Escuchar</span>
+                    </button>
+                </div>
+
+                <!-- Tarjeta Visual del Personaje / Ilustración -->
+                <div class="my-6 text-center bg-slate-900/90 p-6 rounded-2xl border border-slate-700">
+                    <div id="ex2-avatar" class="text-6xl mb-3 transform hover:scale-110 transition">👩‍⚕️</div>
+                    <p id="ex2-spanish-prompt" class="text-slate-300 font-medium text-sm sm:text-base">"Ella es una doctora."</p>
+                    
+                    <!-- Oración con Espacios para Rellenar -->
+                    <div class="mt-6 flex flex-wrap items-center justify-center gap-2 text-lg sm:text-2xl font-bold text-white">
+                        <span id="ex2-subject-part" class="text-sky-400">She</span>
+                        <span id="ex2-verb-slot" class="px-4 py-2 rounded-xl bg-slate-800 border-2 border-dashed border-sky-500/60 text-emerald-400 min-w-[70px] text-center">?</span>
+                        <span id="ex2-profession-slot" class="px-4 py-2 rounded-xl bg-slate-800 border-2 border-dashed border-purple-500/60 text-purple-300 min-w-[140px] text-center">?</span>
+                    </div>
+                </div>
+
+                <!-- Opciones de Selección -->
+                <div class="space-y-4">
+                    <!-- Paso A: Seleccionar Verbo To Be -->
+                    <div>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">Paso 1: Elige la conjugación del verbo To Be</span>
+                        <div id="ex2-verb-options" class="grid grid-cols-3 gap-3">
+                            <!-- Inyectado por JS -->
+                        </div>
+                    </div>
+
+                    <!-- Paso B: Seleccionar Profesión -->
+                    <div>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">Paso 2: Elige la profesión o complemento correcto</span>
+                        <div id="ex2-prof-options" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            <!-- Inyectado por JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Caja de Retroalimentación -->
+                <div id="ex2-feedback" class="mt-6 p-4 rounded-2xl hidden border transition-all text-xs sm:text-sm">
+                    <!-- Retroalimentación dinámica -->
+                </div>
+
+                <!-- Botón Siguiente -->
+                <button id="ex2-next-btn" onclick="nextEx2Question()" class="mt-6 w-full py-3.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-bold text-sm shadow-lg transition hidden">
+                    Siguiente Oración ➔
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= VISTA 3: DESAFÍO VELOZ GRAMATICAL ================= -->
+        <section id="view-ex3" class="hidden space-y-6">
+            <div class="flex items-center justify-between">
+                <button onclick="switchView('dashboard')" class="text-xs text-slate-400 hover:text-white transition flex items-center space-x-1 font-bold">
+                    <span>← Volver al Menú</span>
+                </button>
+                <div class="flex items-center space-x-3">
+                    <span class="text-xs text-slate-400 font-bold">Puntuación: <span id="ex3-score" class="text-purple-400 font-mono">0</span></span>
+                    <span class="text-xs text-slate-400 font-bold">Aciertos: <span id="ex3-streak" class="text-emerald-400 font-mono">0</span></span>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-3xl p-6 sm:p-8 max-w-2xl mx-auto border border-purple-500/30 text-center">
+                <span class="text-xs font-bold text-purple-400 uppercase tracking-widest block mb-1">Módulo 3</span>
+                <h3 class="text-xl font-bold text-white mb-2">¿La oración está bien escrita?</h3>
+                <p class="text-xs text-slate-300 mb-6">Analiza el pronombre, el verbo y si la profesión es singular o plural.</p>
+
+                <!-- Tarjeta de Oración Evaluada -->
+                <div class="my-6 bg-slate-900/90 p-8 rounded-3xl border-2 border-purple-500/50 shadow-2xl relative">
+                    <span class="text-xs text-slate-400 font-mono block mb-2">Evaluación Gramatical:</span>
+                    <h2 id="ex3-sentence-card" class="text-2xl sm:text-3xl font-black font-display text-white tracking-wide">
+                        "He are a doctor."
+                    </h2>
+                </div>
+
+                <!-- Botones de Decisión (Correcto / Incorrecto) -->
+                <div class="grid grid-cols-2 gap-4 max-w-md mx-auto mt-6">
+                    <button onclick="checkEx3Speed(true)" class="p-4 sm:p-5 rounded-2xl bg-emerald-950/60 hover:bg-emerald-900/80 border-2 border-emerald-500/60 hover:border-emerald-400 transition transform active:scale-95 group">
+                        <span class="text-3xl block mb-1">✅</span>
+                        <span class="text-sm font-bold text-emerald-300">CORRECTO</span>
+                    </button>
+
+                    <button onclick="checkEx3Speed(false)" class="p-4 sm:p-5 rounded-2xl bg-rose-950/60 hover:bg-rose-900/80 border-2 border-rose-500/60 hover:border-rose-400 transition transform active:scale-95 group">
+                        <span class="text-3xl block mb-1">❌</span>
+                        <span class="text-sm font-bold text-rose-300">INCORRECTO</span>
+                    </button>
+                </div>
+
+                <!-- Feedback del Ejercicio 3 -->
+                <div id="ex3-feedback" class="mt-6 p-4 rounded-2xl hidden border transition-all text-xs sm:text-sm text-left"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL TABLA DE REGLAS GRAMATICALES -->
+    <div id="guide-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
+        <div class="glass-card max-w-3xl w-full p-6 sm:p-8 rounded-3xl border border-emerald-500/40 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="toggleModal('guide-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl font-bold p-2">✕</button>
+
+            <h3 class="text-xl sm:text-2xl font-black font-display animated-gradient-text mb-2">
+                📖 Vocabulario de Salud & Verbo To Be
+            </h3>
+            <p class="text-xs text-slate-300 mb-6">
+                Guía completa de roles hospitalarios, pacientes y familiares.
+            </p>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-700 text-emerald-300 uppercase font-bold tracking-wider">
+                            <th class="p-3">Pronombre</th>
+                            <th class="p-3">To Be</th>
+                            <th class="p-3">Rol / Salud</th>
+                            <th class="p-3">Oración Ejemplo</th>
+                            <th class="p-3">Traducción</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800 text-slate-300 font-mono">
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="p-3 font-bold text-sky-400">I</td>
+                            <td class="p-3 text-emerald-400">am</td>
+                            <td class="p-3">a doctor / a physician</td>
+                            <td class="p-3 text-white">I am a physician.</td>
+                            <td class="p-3 text-slate-400 font-sans">Yo soy médico(a).</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="p-3 font-bold text-sky-400">He</td>
+                            <td class="p-3 text-emerald-400">is</td>
+                            <td class="p-3">a registered nurse</td>
+                            <td class="p-3 text-white">He is a registered nurse.</td>
+                            <td class="p-3 text-slate-400 font-sans">Él es jefe de enfermería.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="p-3 font-bold text-sky-400">She</td>
+                            <td class="p-3 text-emerald-400">is</td>
+                            <td class="p-3">a nursing assistant</td>
+                            <td class="p-3 text-white">She is a nursing assistant.</td>
+                            <td class="p-3 text-slate-400 font-sans">Ella es auxiliar de enfermería.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="p-3 font-bold text-sky-400">It</td>
+                            <td class="p-3 text-emerald-400">is</td>
+                            <td class="p-3">a patient</td>
+                            <td class="p-3 text-white">He/She is a patient.</td>
+                            <td class="p-3 text-slate-400 font-sans">Es un(a) paciente.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="p-3 font-bold text-sky-400">You</td>
+                            <td class="p-3 text-emerald-400">are</td>
+                            <td class="p-3">a family member</td>
+                            <td class="p-3 text-white">You are a family member.</td>
+                            <td class="p-3 text-slate-400 font-sans">Tú eres un familiar.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="p-3 font-bold text-purple-400">We</td>
+                            <td class="p-3 text-emerald-400">are</td>
+                            <td class="p-3 text-amber-300">relatives</td>
+                            <td class="p-3 text-white">We are relatives.</td>
+                            <td class="p-3 text-slate-400 font-sans">Nosotros somos parientes.</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/40">
+                            <td class="p-3 font-bold text-purple-400">They</td>
+                            <td class="p-3 text-emerald-400">are</td>
+                            <td class="p-3 text-amber-300">patients / doctors</td>
+                            <td class="p-3 text-white">They are patients.</td>
+                            <td class="p-3 text-slate-400 font-sans">Ellos(as) son pacientes.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-6 p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/30 text-xs text-emerald-200 space-y-2">
+                <span class="font-bold text-amber-300 block">⚠️ Regla Importante de Módulo 1:</span>
+                <p class="text-slate-300">
+                    Cualquier combinación que sea <strong>gramaticalmente correcta</strong> en inglés será aceptada. Por ejemplo, <em>I am a physician</em>, <em>I am a nurse</em> o <em>I am a patient</em> son todas respuestas válidas.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="glass-card border-t border-slate-800 py-4 text-center text-xs text-slate-400 mt-8">
+        <p>Plataforma Interactiva de Inglés • Verbo To Be & Profesiones</p>
+    </footer>
+
+    <script>
+        /* ================= ESTADO GLOBAL Y AUDIOS ================= */
+        let userStats = {
+            xp: 0,
+            streak: 0
+        };
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playSfx(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            const now = audioCtx.currentTime;
+
+            if (type === 'correct') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, now);
+                osc.frequency.setValueAtTime(659.25, now + 0.09);
+                osc.frequency.setValueAtTime(783.99, now + 0.18);
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.32);
+                osc.start(now);
+                osc.stop(now + 0.32);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(280, now);
+                osc.frequency.setValueAtTime(190, now + 0.12);
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.28);
+                osc.start(now);
+                osc.stop(now + 0.28);
+            }
+        }
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.88;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function addXP(amount) {
+            userStats.xp += amount;
+            userStats.streak += 1;
+            document.getElementById('xp-counter').textContent = `${userStats.xp} XP`;
+            document.getElementById('streak-counter').textContent = `${userStats.streak} Racha`;
+        }
+
+        function resetStreak() {
+            userStats.streak = 0;
+            document.getElementById('streak-counter').textContent = `0 Racha`;
+        }
+
+        function toggleModal(id) {
+            document.getElementById(id).classList.toggle('hidden');
+        }
+
+        function switchView(viewName) {
+            document.getElementById('view-dashboard').classList.add('hidden');
+            document.getElementById('view-ex1').classList.add('hidden');
+            document.getElementById('view-ex2').classList.add('hidden');
+            document.getElementById('view-ex3').classList.add('hidden');
+
+            if (viewName === 'dashboard') {
+                document.getElementById('view-dashboard').classList.remove('hidden');
+            } else if (viewName === 'ex1') {
+                document.getElementById('view-ex1').classList.remove('hidden');
+                initEx1Matching();
+            } else if (viewName === 'ex2') {
+                document.getElementById('view-ex2').classList.remove('hidden');
+                loadEx2Question();
+            } else if (viewName === 'ex3') {
+                document.getElementById('view-ex3').classList.remove('hidden');
+                loadEx3Question();
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /* ================= MÓDULO 1: MATCHING TRIPLE FLEXIBLE (HEALTHCARE SECTOR) ================= */
+        // Lista de Pronombres
+        const EX1_PRONOUNS = [
+            { id: 'p1', pronoun: 'I', number: 'singular', verbNeeded: 'am' },
+            { id: 'p2', pronoun: 'He', number: 'singular', verbNeeded: 'is' },
+            { id: 'p3', pronoun: 'She', number: 'singular', verbNeeded: 'is' },
+            { id: 'p4', pronoun: 'We', number: 'plural', verbNeeded: 'are' },
+            { id: 'p5', pronoun: 'They', number: 'plural', verbNeeded: 'are' },
+            { id: 'p6', pronoun: 'You', number: 'both', verbNeeded: 'are' }
+        ];
+
+        // Opciones del Verbo To Be
+        const EX1_VERBS = [
+            { id: 'v1', val: 'am' },
+            { id: 'v2', val: 'is' },
+            { id: 'v3', val: 'are' }
+        ];
+
+        // Lista de Opciones del Sector Salud (Singulares con a/an y Plurales)
+        const EX1_PROFESSIONS = [
+            { id: 'prof1', text: 'a physician', number: 'singular', es: 'un(a) médico(a)' },
+            { id: 'prof2', text: 'a registered nurse', number: 'singular', es: 'un(a) jefe de enfermería' },
+            { id: 'prof3', text: 'a nursing assistant', number: 'singular', es: 'un(a) auxiliar de enfermería' },
+            { id: 'prof4', text: 'a patient', number: 'singular', es: 'un(a) paciente' },
+            { id: 'prof5', text: 'a family member', number: 'singular', es: 'un familiar' },
+            { id: 'prof6', text: 'patients', number: 'plural', es: 'pacientes' },
+            { id: 'prof7', text: 'relatives', number: 'plural', es: 'familiares / parientes' },
+            { id: 'prof8', text: 'physicians', number: 'plural', es: 'médicos(as)' }
+        ];
+
+        let selectedCol1Id = null;
+        let selectedCol2Val = null;
+        let selectedCol3Id = null;
+        let ex1CompletedPronouns = new Set();
+        let lastValidSentence = "";
+
+        function initEx1Matching() {
+            selectedCol1Id = null;
+            selectedCol2Val = null;
+            selectedCol3Id = null;
+            ex1CompletedPronouns.clear();
+            document.getElementById('ex1-success-box').classList.add('hidden');
+            document.getElementById('ex1-feedback').classList.add('hidden');
+            updateTripletBar();
+            renderEx1Columns();
+        }
+
+        function resetEx1Matching() {
+            initEx1Matching();
+        }
+
+        function renderEx1Columns() {
+            const col1Container = document.getElementById('col1-container');
+            const col2Container = document.getElementById('col2-container');
+            const col3Container = document.getElementById('col3-container');
+
+            col1Container.innerHTML = '';
+            col2Container.innerHTML = '';
+            col3Container.innerHTML = '';
+
+            document.getElementById('ex1-completed-count').textContent = `${ex1CompletedPronouns.size} / ${EX1_PRONOUNS.length}`;
+
+            // Columna 1: Pronombres
+            EX1_PRONOUNS.forEach(pItem => {
+                const isMatched = ex1CompletedPronouns.has(pItem.id);
+                const isSelected = selectedCol1Id === pItem.id;
+                
+                const btn = document.createElement('button');
+                btn.disabled = isMatched;
+                let cls = 'w-full p-3 rounded-xl font-bold text-sm flex items-center justify-between border transition shadow-sm ';
+                
+                if (isMatched) {
+                    cls += 'bg-slate-900/40 border-emerald-500/40 text-emerald-400 opacity-50 cursor-not-allowed';
+                } else if (isSelected) {
+                    cls += 'bg-sky-600 border-2 border-sky-300 text-white shadow-sky-500/30 scale-[1.02]';
+                } else {
+                    cls += 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-200';
+                }
+                
+                btn.className = cls;
+                btn.innerHTML = `<span>${pItem.pronoun}</span> <span>${isMatched ? '✅' : '👉'}</span>`;
+                btn.onclick = () => {
+                    selectedCol1Id = pItem.id;
+                    updateTripletBar();
+                    renderEx1Columns();
+                };
+                col1Container.appendChild(btn);
+            });
+
+            // Columna 2: Verbos To Be (am, is, are)
+            EX1_VERBS.forEach(vItem => {
+                const isSelected = selectedCol2Val === vItem.val;
+
+                const btn = document.createElement('button');
+                let cls = 'w-full p-3.5 rounded-xl font-bold text-sm flex items-center justify-between border transition shadow-sm ';
+
+                if (isSelected) {
+                    cls += 'bg-emerald-600 border-2 border-emerald-300 text-white shadow-emerald-500/30 scale-[1.02]';
+                } else {
+                    cls += 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-200';
+                }
+
+                btn.className = cls;
+                btn.innerHTML = `<span>${vItem.val}</span> <span>⚡</span>`;
+                btn.onclick = () => {
+                    selectedCol2Val = vItem.val;
+                    updateTripletBar();
+                    renderEx1Columns();
+                };
+                col2Container.appendChild(btn);
+            });
+
+            // Columna 3: Opciones del Sector Salud
+            EX1_PROFESSIONS.forEach(profItem => {
+                const isSelected = selectedCol3Id === profItem.id;
+
+                const btn = document.createElement('button');
+                let cls = 'w-full p-3 rounded-xl font-bold text-sm flex items-center justify-between border transition shadow-sm ';
+
+                if (isSelected) {
+                    cls += 'bg-purple-600 border-2 border-purple-300 text-white shadow-purple-500/30 scale-[1.02]';
+                } else {
+                    cls += 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-200';
+                }
+
+                btn.className = cls;
+                btn.innerHTML = `<div class="text-left"><div class="font-bold">${profItem.text}</div><div class="text-[10px] text-slate-400 font-normal">${profItem.es}</div></div> <span>🎯</span>`;
+                btn.onclick = () => {
+                    selectedCol3Id = profItem.id;
+                    updateTripletBar();
+                    renderEx1Columns();
+                };
+                col3Container.appendChild(btn);
+            });
+        }
+
+        function updateTripletBar() {
+            const pObj = EX1_PRONOUNS.find(x => x.id === selectedCol1Id);
+            const profObj = EX1_PROFESSIONS.find(x => x.id === selectedCol3Id);
+
+            document.getElementById('select-col1').textContent = pObj ? pObj.pronoun : '?';
+            document.getElementById('select-col2').textContent = selectedCol2Val ? selectedCol2Val : '?';
+            document.getElementById('select-col3').textContent = profObj ? profObj.text : '?';
+
+            const btnVerify = document.getElementById('btn-verify-triplet');
+            if (selectedCol1Id && selectedCol2Val && selectedCol3Id) {
+                btnVerify.disabled = false;
+            } else {
+                btnVerify.disabled = true;
+            }
+        }
+
+        function verifyTriplet() {
+            const pObj = EX1_PRONOUNS.find(x => x.id === selectedCol1Id);
+            const profObj = EX1_PROFESSIONS.find(x => x.id === selectedCol3Id);
+            const feedbackEl = document.getElementById('ex1-feedback');
+            const feedbackText = document.getElementById('ex1-feedback-text');
+
+            if (!pObj || !selectedCol2Val || !profObj) return;
+
+            feedbackEl.classList.remove('hidden');
+
+            // 1. Verificar concordancia del Verbo To Be
+            const verbIsCorrect = (selectedCol2Val === pObj.verbNeeded);
+
+            // 2. Verificar concordancia Singular vs Plural
+            let numberIsCorrect = false;
+            if (pObj.number === 'singular' && profObj.number === 'singular') {
+                numberIsCorrect = true;
+            } else if (pObj.number === 'plural' && profObj.number === 'plural') {
+                numberIsCorrect = true;
+            } else if (pObj.number === 'both') {
+                numberIsCorrect = true; // 'You' se adapta a singular o plural
+            }
+
+            if (verbIsCorrect && numberIsCorrect) {
+                // Gramaticalmente Correcto
+                playSfx('correct');
+                addXP(15);
+                ex1CompletedPronouns.add(pObj.id);
+                
+                lastValidSentence = `${pObj.pronoun} ${selectedCol2Val} ${profObj.text}`;
+
+                feedbackEl.className = 'mt-6 p-4 rounded-2xl bg-emerald-950/70 border border-emerald-500/50 text-emerald-200 text-xs sm:text-sm flex items-center justify-between';
+                feedbackText.innerHTML = `<strong>¡Gramaticalmente Correcto! 🎉</strong><br><em>"${lastValidSentence}."</em> (${profObj.es}).`;
+                
+                selectedCol1Id = null;
+                selectedCol2Val = null;
+                selectedCol3Id = null;
+                updateTripletBar();
+                renderEx1Columns();
+
+                if (ex1CompletedPronouns.size === EX1_PRONOUNS.length) {
+                    document.getElementById('ex1-success-box').classList.remove('hidden');
+                }
+            } else {
+                // Incorrecto gramaticalmente
+                playSfx('wrong');
+                resetStreak();
+                
+                let errorReason = '';
+                if (!verbIsCorrect) {
+                    errorReason = `El pronombre <strong>${pObj.pronoun}</strong> debe usarse con el verbo <strong>'${pObj.verbNeeded}'</strong> (seleccionaste '${selectedCol2Val}').`;
+                } else if (!numberIsCorrect) {
+                    if (pObj.number === 'singular') {
+                        errorReason = `<strong>${pObj.pronoun} ${selectedCol2Val}</strong> es singular, por lo que debes seleccionar un rol en singular (ej. <em>${profObj.text.startsWith('a') ? profObj.text : 'a doctor / a patient'}</em>).`;
+                    } else {
+                        errorReason = `<strong>${pObj.pronoun} ${selectedCol2Val}</strong> es plural, por lo que debes elegir un sustantivo plural sin 'a/an' (ej. <em>patients, relatives, doctors</em>).`;
+                    }
+                }
+
+                feedbackEl.className = 'mt-6 p-4 rounded-2xl bg-rose-950/70 border border-rose-500/50 text-rose-200 text-xs sm:text-sm flex items-center justify-between';
+                feedbackText.innerHTML = `<strong>Incorrección Gramatical ❌</strong><br>${errorReason}`;
+            }
+        }
+
+        function speakCurrentTriplet() {
+            if (lastValidSentence) {
+                speakText(lastValidSentence);
+            }
+        }
+
+        /* ================= MÓDULO 2: CONSTRUCTOR DE ORACIONES (HEALTHCARE SECTOR) ================= */
+        const EX2_QUESTIONS = [
+            {
+                avatar: '🩺',
+                spanish: 'Ella es una médica / doctora.',
+                subject: 'She',
+                correctVerb: 'is',
+                correctProf: 'a physician',
+                verbOptions: ['am', 'is', 'are'],
+                profOptions: ['a physician', 'physicians', 'a patient'],
+                explanation: "'She' lleva el verbo 'is'. Al tratarse de una persona singular, requiere 'a physician'."
+            },
+            {
+                avatar: '👨‍⚕️',
+                spanish: 'Yo soy un(a) jefe de enfermería.',
+                subject: 'I',
+                correctVerb: 'am',
+                correctProf: 'a registered nurse',
+                verbOptions: ['am', 'is', 'are'],
+                profOptions: ['a registered nurse', 'registered nurses', 'a relative'],
+                explanation: "'I' se conjuga siempre con 'am' en presente simple."
+            },
+            {
+                avatar: '👩‍🦽',
+                spanish: 'Ellos son pacientes.',
+                subject: 'They',
+                correctVerb: 'are',
+                correctProf: 'patients',
+                verbOptions: ['am', 'is', 'are'],
+                profOptions: ['a patient', 'patients', 'a nursing assistant'],
+                explanation: "'They' representa plural y requiere 'are'. La profesión/rol va en plural sin 'a/an'."
+            },
+            {
+                avatar: '🩺',
+                spanish: 'Él es un auxiliar de enfermería.',
+                subject: 'He',
+                correctVerb: 'is',
+                correctProf: 'a nursing assistant',
+                verbOptions: ['is', 'are', 'am'],
+                profOptions: ['nursing assistants', 'a nursing assistant', 'a family member'],
+                explanation: "'He' requiere 'is' y el artículo 'a' antes del rol en singular."
+            },
+            {
+                avatar: '👨‍👩‍👧',
+                spanish: 'Nosotros somos familiares / parientes.',
+                subject: 'We',
+                correctVerb: 'are',
+                correctProf: 'relatives',
+                verbOptions: ['is', 'am', 'are'],
+                profOptions: ['a relative', 'relatives', 'physicians'],
+                explanation: "'We' (Nosotros) es plural, por lo que va con 'are' y 'relatives' en plural."
+            },
+            {
+                avatar: '🏥',
+                spanish: 'Tú eres un familiar del paciente.',
+                subject: 'You',
+                correctVerb: 'are',
+                correctProf: 'a family member',
+                verbOptions: ['is', 'am', 'are'],
+                profOptions: ['a family member', 'family members', 'a physician'],
+                explanation: "'You' siempre se combina con 'are'. Al dirigirnos a una persona ('tú'), usas 'a family member'."
+            }
+        ];
+
+        let ex2Index = 0;
+        let selectedEx2Verb = null;
+        let selectedEx2Prof = null;
+
+        function loadEx2Question() {
+            const q = EX2_QUESTIONS[ex2Index];
+            selectedEx2Verb = null;
+            selectedEx2Prof = null;
+
+            document.getElementById('ex2-progress-text').textContent = `${ex2Index + 1} / ${EX2_QUESTIONS.length}`;
+            document.getElementById('ex2-avatar').textContent = q.avatar;
+            document.getElementById('ex2-spanish-prompt').textContent = `"${q.spanish}"`;
+            document.getElementById('ex2-subject-part').textContent = q.subject;
+
+            document.getElementById('ex2-verb-slot').textContent = '?';
+            document.getElementById('ex2-profession-slot').textContent = '?';
+
+            document.getElementById('ex2-feedback').classList.add('hidden');
+            document.getElementById('ex2-next-btn').classList.add('hidden');
+
+            renderEx2Options();
+        }
+
+        function renderEx2Options() {
+            const q = EX2_QUESTIONS[ex2Index];
+            const verbContainer = document.getElementById('ex2-verb-options');
+            const profContainer = document.getElementById('ex2-prof-options');
+
+            verbContainer.innerHTML = '';
+            profContainer.innerHTML = '';
+
+            // Opciones de Verbo To Be
+            q.verbOptions.forEach(v => {
+                const btn = document.createElement('button');
+                const isSelected = selectedEx2Verb === v;
+                btn.className = `py-2.5 px-4 rounded-xl font-bold text-sm border transition shadow-sm ${
+                    isSelected ? 'bg-emerald-600 border-2 border-emerald-300 text-white shadow-emerald-500/30' : 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-200'
+                }`;
+                btn.textContent = v;
+                btn.onclick = () => {
+                    selectedEx2Verb = v;
+                    document.getElementById('ex2-verb-slot').textContent = v;
+                    renderEx2Options();
+                    checkEx2Completion();
+                };
+                verbContainer.appendChild(btn);
+            });
+
+            // Opciones de Profesión/Rol
+            q.profOptions.forEach(p => {
+                const btn = document.createElement('button');
+                const isSelected = selectedEx2Prof === p;
+                btn.className = `py-2.5 px-4 rounded-xl font-bold text-sm border transition shadow-sm ${
+                    isSelected ? 'bg-purple-600 border-2 border-purple-300 text-white shadow-purple-500/30' : 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-200'
+                }`;
+                btn.textContent = p;
+                btn.onclick = () => {
+                    selectedEx2Prof = p;
+                    document.getElementById('ex2-profession-slot').textContent = p;
+                    renderEx2Options();
+                    checkEx2Completion();
+                };
+                profContainer.appendChild(btn);
+            });
+        }
+
+        function checkEx2Completion() {
+            if (selectedEx2Verb && selectedEx2Prof) {
+                const q = EX2_QUESTIONS[ex2Index];
+                const feedbackEl = document.getElementById('ex2-feedback');
+                
+                feedbackEl.classList.remove('hidden');
+
+                if (selectedEx2Verb === q.correctVerb && selectedEx2Prof === q.correctProf) {
+                    playSfx('correct');
+                    addXP(15);
+                    feedbackEl.className = 'mt-6 p-4 rounded-2xl bg-emerald-950/70 border border-emerald-500/50 text-emerald-200 text-xs sm:text-sm';
+                    feedbackEl.innerHTML = `<strong>¡Oración Perfecta! 🎉</strong><br><em>"${q.subject} ${q.correctVerb} ${q.correctProf}."</em><br><span class="text-slate-300">${q.explanation}</span>`;
+                } else {
+                    playSfx('wrong');
+                    resetStreak();
+                    feedbackEl.className = 'mt-6 p-4 rounded-2xl bg-rose-950/70 border border-rose-500/50 text-rose-200 text-xs sm:text-sm';
+                    feedbackEl.innerHTML = `<strong>Casi lo logras ❌</strong><br>La respuesta correcta es: <strong>"${q.subject} ${q.correctVerb} ${q.correctProf}."</strong><br><span class="text-slate-300">${q.explanation}</span>`;
+                }
+
+                document.getElementById('ex2-next-btn').classList.remove('hidden');
+            }
+        }
+
+        function speakEx2Sentence() {
+            const q = EX2_QUESTIONS[ex2Index];
+            const verb = selectedEx2Verb || q.correctVerb;
+            const prof = selectedEx2Prof || q.correctProf;
+            speakText(`${q.subject} ${verb} ${prof}`);
+        }
+
+        function nextEx2Question() {
+            ex2Index = (ex2Index + 1) % EX2_QUESTIONS.length;
+            loadEx2Question();
+        }
+
+        /* ================= MÓDULO 3: DESAFÍO VELOZ GRAMATICAL (HEALTHCARE) ================= */
+        const EX3_SPEED_QUESTIONS = [
+            { sentence: "He is a physician.", isValid: true, note: "Correcto: 'He' se conjuga con 'is' y lleva el artículo 'a' en singular." },
+            { sentence: "They is registered nurses.", isValid: false, note: "Incorrecto: 'They' requiere el verbo 'are'." },
+            { sentence: "I am a nursing assistant.", isValid: true, note: "Correcto: 'I' se combina perfectamente con 'am'." },
+            { sentence: "We are a patients.", isValid: false, note: "Incorrecto: En plural 'We are' no se coloca el artículo 'a'." },
+            { sentence: "She are a registered nurse.", isValid: false, note: "Incorrecto: 'She' requiere el verbo 'is'." },
+            { sentence: "We are relatives.", isValid: true, note: "Correcto: Plural 'We are' con sustantivo plural 'relatives'." },
+            { sentence: "You is a patient.", isValid: false, note: "Incorrecto: 'You' siempre se usa con 'are'." },
+            { sentence: "They are family members.", isValid: true, note: "Correcto: 'They are' con el término plural 'family members'." }
+        ];
+
+        let ex3Index = 0;
+        let ex3Score = 0;
+        let ex3Streak = 0;
+
+        function loadEx3Question() {
+            const q = EX3_SPEED_QUESTIONS[ex3Index];
+            document.getElementById('ex3-sentence-card').textContent = `"${q.sentence}"`;
+            document.getElementById('ex3-feedback').classList.add('hidden');
+        }
+
+        function checkEx3Speed(userChoice) {
+            const q = EX3_SPEED_QUESTIONS[ex3Index];
+            const isCorrect = (userChoice === q.isValid);
+            const feedbackEl = document.getElementById('ex3-feedback');
+
+            feedbackEl.classList.remove('hidden');
+
+            if (isCorrect) {
+                playSfx('correct');
+                ex3Score += 20;
+                ex3Streak += 1;
+                addXP(10);
+                feedbackEl.className = 'mt-6 p-4 rounded-2xl bg-emerald-950/70 border border-emerald-500/50 text-emerald-200 text-xs sm:text-sm';
+                feedbackEl.innerHTML = `<strong>¡Acierto Veloz! ✨</strong> ${q.note}`;
+            } else {
+                playSfx('wrong');
+                ex3Streak = 0;
+                resetStreak();
+                feedbackEl.className = 'mt-6 p-4 rounded-2xl bg-rose-950/70 border border-rose-500/50 text-rose-200 text-xs sm:text-sm';
+                feedbackEl.innerHTML = `<strong>Respuesta incorrecta ❌</strong> ${q.note}`;
+            }
+
+            document.getElementById('ex3-score').textContent = ex3Score;
+            document.getElementById('ex3-streak').textContent = ex3Streak;
+
+            setTimeout(() => {
+                ex3Index = (ex3Index + 1) % EX3_SPEED_QUESTIONS.length;
+                loadEx3Question();
+            }, 1400);
+        }
+
+        window.onload = function() {
+            switchView('dashboard');
+        };
+    </script>
+</body>
+</html>
