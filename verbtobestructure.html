@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediGrammar: Medical English Sentence Scramble</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti for Gamification -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        medical: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985',
+                            800: '#0c4a6e',
+                            900: '#0f172a',
+                        },
+                        clinical: {
+                            50: '#f0fdf4',
+                            500: '#10b981',
+                            600: '#059669',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .tab-btn.active {
+            background-color: #0284c7;
+            color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.3);
+        }
+        .tile-btn {
+            transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+        }
+        .tile-btn:active {
+            transform: scale(0.94);
+        }
+        .slot-target {
+            min-height: 68px;
+            background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
+            background-size: 12px 12px;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between">
+
+    <header class="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="bg-medical-500 text-white p-2.5 rounded-xl shadow-md">
+                        <i class="fa-solid fa-stethoscope text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-extrabold text-xl text-slate-900 leading-tight">MediGrammar</h1>
+                        <p class="text-xs text-medical-600 font-medium">To Be • Demonstratives • Possessives</p>
+                    </div>
+                </div>
+
+                <!-- Global Stats Badge -->
+                <div class="flex items-center gap-3 sm:gap-6 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200 text-xs sm:text-sm">
+                    <div class="flex items-center gap-1.5 text-amber-600 font-bold">
+                        <i class="fa-solid fa-fire text-amber-500"></i>
+                        <span id="streak-counter">0</span> <span class="text-xs text-slate-500 font-normal hidden sm:inline">Racha</span>
+                    </div>
+                    <div class="h-4 w-[1px] bg-slate-300"></div>
+                    <div class="flex items-center gap-1.5 text-emerald-600 font-bold">
+                        <i class="fa-solid fa-star text-amber-400"></i>
+                        <span id="score-counter">0</span> <span class="text-xs text-slate-500 font-normal hidden sm:inline">Pts</span>
+                    </div>
+                </div>
+
+                <!-- Control Buttons -->
+                <div class="flex items-center gap-2">
+                    <button id="btn-audio-toggle" onclick="toggleGlobalAudio()" class="p-2 text-slate-600 hover:text-medical-600 hover:bg-slate-100 rounded-lg transition" title="Activar/Desactivar Sonido">
+                        <i class="fa-solid fa-volume-high text-lg"></i>
+                    </button>
+                    <button onclick="openHelpModal()" class="p-2 text-slate-600 hover:text-medical-600 hover:bg-slate-100 rounded-lg transition" title="Guía Gramatical">
+                        <i class="fa-solid fa-graduation-cap text-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <nav class="flex gap-2 overflow-x-auto pb-2 pt-1 text-xs sm:text-sm font-semibold">
+                <button onclick="switchTab('scramble')" id="tab-scramble" class="tab-btn active flex items-center gap-2 px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 transition whitespace-nowrap">
+                    <i class="fa-solid fa-puzzle-piece text-amber-500"></i> 1. Scramble Sentence
+                </button>
+                <button onclick="switchTab('builder')" id="tab-builder" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 transition whitespace-nowrap">
+                    <i class="fa-solid fa-sliders text-medical-500"></i> 2. Constructor Gramatical
+                </button>
+                <button onclick="switchTab('dictionary')" id="tab-dictionary" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 transition whitespace-nowrap">
+                    <i class="fa-solid fa-book-medical text-emerald-500"></i> 3. Diccionario Vocabulario
+                </button>
+                <button onclick="switchTab('dialogues')" id="tab-dialogues" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 transition whitespace-nowrap">
+                    <i class="fa-solid fa-comments text-purple-500"></i> 4. Diálogos Clínicos
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+
+        <section id="section-scramble" class="space-y-6">
+            <!-- Scramble Control Banner -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <span class="text-xs font-extrabold text-medical-600 uppercase tracking-wider">Práctica Interactiva</span>
+                    <h2 class="text-2xl font-extrabold text-slate-900">Sentence Scramble: Verbo To Be en Salud</h2>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-1">Ordena las palabras para formar la oración correcta según la estructura solicitada.</p>
+                </div>
+
+                <!-- Filter Mode Selector -->
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="setScrambleFilter('all')" id="filter-scramble-all" class="scramble-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-medical-500 text-white transition">Todas</button>
+                    <button onclick="setScrambleFilter('affirmative')" id="filter-scramble-affirmative" class="scramble-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Afirmativas (+)</button>
+                    <button onclick="setScrambleFilter('negative')" id="filter-scramble-negative" class="scramble-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Negativas (-)</button>
+                    <button onclick="setScrambleFilter('interrogative')" id="filter-scramble-interrogative" class="scramble-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Interrogativas (?)</button>
+                </div>
+            </div>
+
+            <!-- Scramble Challenge Card -->
+            <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6 max-w-4xl mx-auto relative">
+                <!-- Card Header Info -->
+                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                    <div class="flex items-center gap-3">
+                        <span id="scramble-type-badge" class="px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                            Afirmativa (+)
+                        </span>
+                        <span id="scramble-vocab-badge" class="px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
+                            Medical Equipment
+                        </span>
+                    </div>
+                    <div class="text-xs font-bold text-slate-400" id="scramble-progress-text">
+                        Ejercicio 1 de 15
+                    </div>
+                </div>
+
+                <!-- Target Meaning / Spanish Hint -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <div class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">Traducción Objetivo:</div>
+                    <div class="text-lg font-bold text-slate-800 italic" id="scramble-translation-es">
+                        "Este es mi estetoscopio."
+                    </div>
+                    <div class="text-xs text-medical-600 mt-2 flex items-center gap-1 font-medium" id="scramble-grammar-hint">
+                        <i class="fa-solid fa-lightbulb text-amber-500"></i> Estructura: Demonstrative + Verb To Be + Possessive + Medical Equipment
+                    </div>
+                </div>
+
+                <!-- Drop Target Area (Selected Words) -->
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Tu Oración (Haz clic en las palabras abajo para construírla):</label>
+                        <button onclick="clearSelectedTiles()" class="text-xs text-slate-400 hover:text-rose-600 transition flex items-center gap-1">
+                            <i class="fa-solid fa-rotate-left"></i> Limpiar
+                        </button>
+                    </div>
+                    <div id="selected-tiles-container" class="slot-target p-3 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 flex flex-wrap gap-2 items-center">
+                        <p id="empty-slot-placeholder" class="text-xs text-slate-400 w-full text-center py-2 italic">Haz clic en los bloques para colocarlos en orden aquí...</p>
+                    </div>
+                </div>
+
+                <!-- Word Bank Area (Available Tiles) -->
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-500 uppercase tracking-wider mb-2">Banco de Palabras:</label>
+                    <div id="word-bank-container" class="p-4 rounded-2xl bg-slate-100 border border-slate-200 flex flex-wrap gap-2.5 items-center justify-center min-h-[80px]">
+                        <!-- Dynamic tiles insertion -->
+                    </div>
+                </div>
+
+                <!-- Feedback Message -->
+                <div id="scramble-feedback-box" class="hidden p-4 rounded-xl text-sm font-semibold flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <i id="scramble-feedback-icon" class="text-xl"></i>
+                        <span id="scramble-feedback-text"></span>
+                    </div>
+                    <button onclick="speakCurrentScramble()" class="text-xs bg-white/50 hover:bg-white px-3 py-1.5 rounded-lg border flex items-center gap-1 text-slate-700 transition">
+                        <i class="fa-solid fa-volume-high"></i> Escuchar
+                    </button>
+                </div>
+
+                <!-- Action Controls Bar -->
+                <div class="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                    <button onclick="toggleScrambleHintModal()" class="text-xs text-slate-500 hover:text-medical-600 font-bold flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 transition">
+                        <i class="fa-solid fa-circle-question text-amber-500"></i> Pista Gramatical
+                    </button>
+
+                    <div class="flex items-center gap-3">
+                        <button onclick="checkScrambleAnswer()" id="btn-check-scramble" class="bg-medical-500 hover:bg-medical-600 text-white font-bold px-6 py-2.5 rounded-xl shadow-md transition flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-circle-check"></i> Verificar Oración
+                        </button>
+                        <button onclick="nextScrambleQuestion()" id="btn-next-scramble" class="hidden bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-2.5 rounded-xl shadow-md transition flex items-center gap-2 text-sm">
+                            Siguiente <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-builder" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                <div class="border-b border-slate-100 pb-4">
+                    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-medical-500"></i> Constructor de Oraciones & Scrambler Personalizado
+                    </h2>
+                    <p class="text-sm text-slate-500 mt-1">Selecciona los componentes para explorar concordancia o generar un ejercicio Scramble a medida.</p>
+                </div>
+
+                <!-- Type Selector -->
+                <div class="flex flex-wrap gap-3 justify-center">
+                    <button onclick="setBuilderType('affirmative')" id="stype-affirmative" class="stype-btn flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-700 font-bold text-sm transition">
+                        <i class="fa-solid fa-plus-circle"></i> Afirmativa (+)
+                    </button>
+                    <button onclick="setBuilderType('negative')" id="stype-negative" class="stype-btn flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 transition">
+                        <i class="fa-solid fa-minus-circle"></i> Negativa (-)
+                    </button>
+                    <button onclick="setBuilderType('interrogative')" id="stype-interrogative" class="stype-btn flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 transition">
+                        <i class="fa-solid fa-question-circle"></i> Interrogativa (?)
+                    </button>
+                </div>
+
+                <!-- Dropdown Selectors Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                    <!-- Demonstrative -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">1. Demonstrative</label>
+                        <select id="build-demo" onchange="updateBuilderResult()" class="w-full p-3 rounded-xl border border-slate-300 bg-white font-semibold text-slate-800 focus:ring-2 focus:ring-medical-500 text-sm">
+                            <option value="This" data-plural="false">This (Este/Esta - Cerca)</option>
+                            <option value="That" data-plural="false">That (Aquel/Esa - Lejos)</option>
+                            <option value="These" data-plural="true">These (Estos/Estas - Cerca)</option>
+                            <option value="Those" data-plural="true">Those (Aquellos/Esas - Lejos)</option>
+                        </select>
+                    </div>
+
+                    <!-- Verb To Be -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">2. Verb To Be</label>
+                        <select id="build-tobe" onchange="updateBuilderResult()" class="w-full p-3 rounded-xl border border-slate-300 bg-white font-bold text-medical-600 focus:ring-2 focus:ring-medical-500 text-sm">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+
+                    <!-- Possessive Adjective -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">3. Possessive Adjective</label>
+                        <select id="build-possessive" onchange="updateBuilderResult()" class="w-full p-3 rounded-xl border border-slate-300 bg-white font-semibold text-purple-700 focus:ring-2 focus:ring-purple-500 text-sm">
+                            <option value="my">my (mi / mis)</option>
+                            <option value="your">your (tu / tus)</option>
+                            <option value="his">his (su de él)</option>
+                            <option value="her">her (su de ella)</option>
+                            <option value="its">its (su de objeto/animal)</option>
+                            <option value="our">our (nuestro/a/s)</option>
+                            <option value="their">their (su de ellos)</option>
+                        </select>
+                    </div>
+
+                    <!-- Target Vocabulary -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">4. Término Médico</label>
+                        <select id="build-vocab" onchange="updateBuilderResult()" class="w-full p-3 rounded-xl border border-slate-300 bg-white font-semibold text-slate-800 focus:ring-2 focus:ring-medical-500 text-sm">
+                            <!-- Populated via JS -->
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Generated Sentence Display Card -->
+                <div class="bg-medical-900 text-white p-6 rounded-2xl shadow-lg space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs uppercase font-bold tracking-wider text-medical-300">Oración Formada</span>
+                        <button onclick="speakText(document.getElementById('builder-sentence-en').textContent)" class="text-xs bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg flex items-center gap-2 transition text-white">
+                            <i class="fa-solid fa-volume-high text-medical-300"></i> Escuchar Pronunciación
+                        </button>
+                    </div>
+
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-white tracking-wide" id="builder-sentence-en">
+                            This is my stethoscope.
+                        </div>
+                        <div class="text-sm text-slate-300 font-medium italic mt-1" id="builder-sentence-es">
+                            Este es mi estetoscopio.
+                        </div>
+                    </div>
+
+                    <div id="builder-validation" class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                        <i class="fa-solid fa-circle-check"></i> Concordancia Singular/Plural Correcta
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="section-dictionary" class="hidden space-y-6">
+            <!-- Grammar Mini-Guide Bar -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- To Be Box -->
+                <div class="glass-card p-4 rounded-2xl border-l-4 border-l-medical-500 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="font-bold text-slate-900 flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-bolt text-medical-500"></i> Verbo To Be
+                        </h3>
+                        <span class="text-[10px] bg-medical-100 text-medical-700 px-2 py-0.5 rounded-full font-bold">Ser / Estar</span>
+                    </div>
+                    <div class="text-xs space-y-1 text-slate-600">
+                        <p><strong class="text-emerald-600">(+) Afirmativo:</strong> Subject + am/is/are</p>
+                        <p><strong class="text-rose-600">(-) Negativo:</strong> Subject + is not / are not</p>
+                        <p><strong class="text-amber-600">(?) Interrogativo:</strong> Is / Are + Subject ...?</p>
+                    </div>
+                </div>
+
+                <!-- Demonstratives Box -->
+                <div class="glass-card p-4 rounded-2xl border-l-4 border-l-purple-500 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="font-bold text-slate-900 flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-hand-pointer text-purple-500"></i> Demonstratives
+                        </h3>
+                        <span class="text-[10px] bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-bold">Ubicación</span>
+                    </div>
+                    <div class="text-xs grid grid-cols-2 gap-2 text-slate-600">
+                        <div class="bg-purple-50 p-1.5 rounded border border-purple-100">
+                            <strong>Cerca:</strong>
+                            <p>Singular: <span class="font-bold text-purple-700">This</span></p>
+                            <p>Plural: <span class="font-bold text-purple-700">These</span></p>
+                        </div>
+                        <div class="bg-purple-50 p-1.5 rounded border border-purple-100">
+                            <strong>Lejos:</strong>
+                            <p>Singular: <span class="font-bold text-purple-700">That</span></p>
+                            <p>Plural: <span class="font-bold text-purple-700">Those</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Possessives Box -->
+                <div class="glass-card p-4 rounded-2xl border-l-4 border-l-emerald-500 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="font-bold text-slate-900 flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-user-tag text-emerald-500"></i> Possessives
+                        </h3>
+                        <span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-bold">Pertenencia</span>
+                    </div>
+                    <div class="text-xs flex flex-wrap gap-1 mt-1">
+                        <span class="bg-slate-100 px-2 py-0.5 rounded font-mono text-slate-800">my</span>
+                        <span class="bg-slate-100 px-2 py-0.5 rounded font-mono text-slate-800">your</span>
+                        <span class="bg-slate-100 px-2 py-0.5 rounded font-mono text-slate-800">his</span>
+                        <span class="bg-slate-100 px-2 py-0.5 rounded font-mono text-slate-800">her</span>
+                        <span class="bg-slate-100 px-2 py-0.5 rounded font-mono text-slate-800">its</span>
+                        <span class="bg-slate-100 px-2 py-0.5 rounded font-mono text-slate-800">our</span>
+                        <span class="bg-slate-100 px-2 py-0.5 rounded font-mono text-slate-800">their</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vocabulary Category Filter Buttons -->
+            <div class="flex flex-wrap items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="filterVocab('all')" id="vocab-cat-all" class="vocab-cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-medical-500 text-white transition">Todos (30)</button>
+                    <button onclick="filterVocab('professions')" id="vocab-cat-professions" class="vocab-cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Professions</button>
+                    <button onclick="filterVocab('equipment')" id="vocab-cat-equipment" class="vocab-cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Medical Equipment</button>
+                    <button onclick="filterVocab('body')" id="vocab-cat-body" class="vocab-cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Parts of the Body</button>
+                </div>
+                <div class="relative w-full sm:w-64">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                    <input type="text" id="vocab-search-input" onkeyup="searchVocab()" placeholder="Buscar palabra o traducción..." class="w-full pl-9 pr-4 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-medical-500">
+                </div>
+            </div>
+
+            <!-- Grid of Cards -->
+            <div id="vocab-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Dynamically populated -->
+            </div>
+        </section>
+
+        <section id="section-dialogues" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+                <div class="border-b border-slate-100 pb-4">
+                    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-comments text-purple-500"></i> Diálogos en Entorno Clínico
+                    </h2>
+                    <p class="text-sm text-slate-500 mt-1">Completa los vacíos en las conversaciones hospitalarias aplicando las estructuras aprendidas.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="dialogues-container">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="modal-help" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b pb-3">
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-graduation-cap text-medical-500"></i> Guía Gramatical: To Be + Demonstratives + Possessives
+                </h3>
+                <button onclick="closeHelpModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            
+            <div class="space-y-4 text-xs sm:text-sm text-slate-600">
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-slate-900 mb-1">1. Formas del Verbo To Be:</h4>
+                    <p>• <strong>Afirmativo (+):</strong> <em>This IS my thermometer. / These ARE our gloves.</em></p>
+                    <p>• <strong>Negativo (-):</strong> <em>That IS NOT his blood pressure cuff. / Those ARE NOT her knees.</em></p>
+                    <p>• <strong>Interrogativo (?):</strong> <em>IS this your registered nurse? / ARE those their IV lines?</em></p>
+                </div>
+
+                <div class="bg-purple-50 p-3 rounded-xl border border-purple-200">
+                    <h4 class="font-bold text-purple-900 mb-1">2. Demostrativos (Demonstratives):</h4>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><strong>This:</strong> Singular + Cerca (<em>This is my face</em>)</li>
+                        <li><strong>That:</strong> Singular + Lejos (<em>That is her doctor</em>)</li>
+                        <li><strong>These:</strong> Plural + Cerca (<em>These are my fingers</em>)</li>
+                        <li><strong>Those:</strong> Plural + Lejos (<em>Those are their feet</em>)</li>
+                    </ul>
+                </div>
+
+                <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200">
+                    <h4 class="font-bold text-emerald-900 mb-1">3. Adjetivos Posesivos (Possessive Adjectives):</h4>
+                    <p>Expresan pertenencia antes del objeto o profesión:</p>
+                    <p class="font-mono text-slate-700 mt-1">my, your, his (él), her (ella), its (objeto), our (nosotros), their (ellos/ellas)</p>
+                </div>
+            </div>
+
+            <div class="text-right border-t pt-3">
+                <button onclick="closeHelpModal()" class="bg-medical-500 text-white font-bold text-xs px-5 py-2 rounded-xl">¡Entendido!</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500 mt-auto">
+        <p>© 2026 MediGrammar Platform • Plataforma de Práctica Gramatical Médica en Inglés</p>
+    </footer>
+
+    <script>
+        /* Exact Vocabulary Dataset as specified by user */
+        const VOCAB_DATA = [
+            // Health Care Professions
+            { id: 'p1', category: 'professions', en: 'Nursing Assistant', es: 'Auxiliar de Enfermería', icon: 'fa-user-nurse', plural: false },
+            { id: 'p2', category: 'professions', en: 'Nurse', es: 'Enfermero/a', icon: 'fa-user-nurse', plural: false },
+            { id: 'p3', category: 'professions', en: 'Registered Nurse', es: 'Enfermero/a Titulado/a', icon: 'fa-user-doctor', plural: false },
+            { id: 'p4', category: 'professions', en: 'Doctor / Physician', es: 'Médico / Doctor', icon: 'fa-stethoscope', plural: false },
+            { id: 'p5', category: 'professions', en: 'Patient', es: 'Paciente', icon: 'fa-bed-pulse', plural: false },
+            { id: 'p6', category: 'professions', en: 'Relative / Family member', es: 'Familiar / Pariente', icon: 'fa-people-roof', plural: false },
+
+            // Medical Equipment
+            { id: 'e1', category: 'equipment', en: 'Stethoscope', es: 'Estetoscopio', icon: 'fa-stethoscope', plural: false },
+            { id: 'e2', category: 'equipment', en: 'Thermometer', es: 'Termómetro', icon: 'fa-temperature-quarter', plural: false },
+            { id: 'e3', category: 'equipment', en: 'Pulse oximeter', es: 'Oxímetro de pulso', icon: 'fa-heart-pulse', plural: false },
+            { id: 'e4', category: 'equipment', en: 'Blood pressure cuff', es: 'Tensiómetro', icon: 'fa-hand-holding-medical', plural: false },
+            { id: 'e5', category: 'equipment', en: 'Glucometer', es: 'Glucómetro', icon: 'fa-vials', plural: false },
+            { id: 'e6', category: 'equipment', en: 'Intravenous line (IV line)', es: 'Línea Intravenosa (Vía IV)', icon: 'fa-vial-circle-check', plural: false },
+
+            // Parts of the Body
+            { id: 'b1', category: 'body', en: 'Face', es: 'Cara / Rostro', icon: 'fa-face-smile', plural: false },
+            { id: 'b2', category: 'body', en: 'Eye', es: 'Ojo', icon: 'fa-eye', plural: false },
+            { id: 'b3', category: 'body', en: 'Nose', es: 'Nariz', icon: 'fa-toilet-paper-slash', plural: false },
+            { id: 'b4', category: 'body', en: 'Mouth', es: 'Boca', icon: 'fa-teeth-open', plural: false },
+            { id: 'b5', category: 'body', en: 'Ear', es: 'Oído / Oreja', icon: 'fa-ear-listen', plural: false },
+            { id: 'b6', category: 'body', en: 'Head', es: 'Cabeza', icon: 'fa-child', plural: false },
+            { id: 'b7', category: 'body', en: 'Forehead', es: 'Frente', icon: 'fa-head-side-virus', plural: false },
+            { id: 'b8', category: 'body', en: 'Chest', es: 'Pecho / Tórax', icon: 'fa-child-reaching', plural: false },
+            { id: 'b9', category: 'body', en: 'Armpit', es: 'Axila', icon: 'fa-person', plural: false },
+            { id: 'b10', category: 'body', en: 'Arm', es: 'Brazo', icon: 'fa-hand-flex', plural: false },
+            { id: 'b11', category: 'body', en: 'Elbow', es: 'Codo', icon: 'fa-hand-dots', plural: false },
+            { id: 'b12', category: 'body', en: 'Hand', es: 'Mano', icon: 'fa-hand', plural: false },
+            { id: 'b13', category: 'body', en: 'Finger', es: 'Dedo de la mano', icon: 'fa-hand-pointer', plural: false },
+            { id: 'b14', category: 'body', en: 'Shoulder', es: 'Hombro', icon: 'fa-child', plural: false },
+            { id: 'b15', category: 'body', en: 'Knee', es: 'Rodilla', icon: 'fa-person-walking', plural: false },
+            { id: 'b16', category: 'body', en: 'Leg', es: 'Pierna', icon: 'fa-person-running', plural: false },
+            { id: 'b17', category: 'body', en: 'Foot', es: 'Pie (Singular)', icon: 'fa-shoe-prints', plural: false },
+            { id: 'b18', category: 'body', en: 'Feet', es: 'Pies (Plural)', icon: 'fa-shoe-prints', plural: true }
+        ];
+
+        /* Comprehensive Scramble Sentence Bank integrating all target structures and vocabulary */
+        const SCRAMBLE_BANK = [
+            // Affirmative (+)
+            {
+                id: 's1', type: 'affirmative', category: 'Medical Equipment',
+                words: ['This', 'is', 'my', 'stethoscope.'],
+                es: 'Este es mi estetoscopio.',
+                hint: 'Demonstrative (Singular) + is + my + Equipment'
+            },
+            {
+                id: 's2', type: 'affirmative', category: 'Health Care Professions',
+                words: ['That', 'is', 'her', 'Registered', 'Nurse.'],
+                es: 'Esa es su enfermera titulada.',
+                hint: 'Demonstrative (Lejos) + is + her + Profession'
+            },
+            {
+                id: 's3', type: 'affirmative', category: 'Parts of the Body',
+                words: ['These', 'are', 'his', 'feet.'],
+                es: 'Estos son sus pies.',
+                hint: 'Demonstrative (Plural) + are + his + Body Part (Plural)'
+            },
+            {
+                id: 's4', type: 'affirmative', category: 'Medical Equipment',
+                words: ['Those', 'are', 'our', 'pulse', 'oximeters.'],
+                es: 'Aquéllos son nuestros oxímetros de pulso.',
+                hint: 'Demonstrative (Plural Lejos) + are + our + Equipment'
+            },
+            {
+                id: 's5', type: 'affirmative', category: 'Health Care Professions',
+                words: ['This', 'is', 'your', 'Doctor', '/', 'Physician.'],
+                es: 'Este es tu médico / doctor.',
+                hint: 'This + is + your + Profession'
+            },
+
+            // Negative (-)
+            {
+                id: 's6', type: 'negative', category: 'Medical Equipment',
+                words: ['This', 'is', 'not', 'my', 'blood', 'pressure', 'cuff.'],
+                es: 'Este no es mi tensiómetro.',
+                hint: 'Demonstrative + is not + possessive + Equipment'
+            },
+            {
+                id: 's7', type: 'negative', category: 'Parts of the Body',
+                words: ['Those', 'are', 'not', 'her', 'knees.'],
+                es: 'Aquéllas no son sus rodillas.',
+                hint: 'Those + are not + her + Body Part (Plural)'
+            },
+            {
+                id: 's8', type: 'negative', category: 'Health Care Professions',
+                words: ['That', 'is', 'not', 'their', 'Nursing', 'Assistant.'],
+                es: 'Aquel no es su auxiliar de enfermería.',
+                hint: 'That + is not + their + Profession'
+            },
+            {
+                id: 's9', type: 'negative', category: 'Medical Equipment',
+                words: ['These', 'are', 'not', 'our', 'glucometers.'],
+                es: 'Estos no son nuestros glucómetros.',
+                hint: 'These + are not + our + Equipment'
+            },
+            {
+                id: 's10', type: 'negative', category: 'Parts of the Body',
+                words: ['This', 'is', 'not', 'his', 'injured', 'armpit.'],
+                es: 'Esta no es su axila lastimada.',
+                hint: 'This + is not + his + Body Part'
+            },
+
+            // Interrogative (?)
+            {
+                id: 's11', type: 'interrogative', category: 'Medical Equipment',
+                words: ['Is', 'this', 'your', 'thermometer?'],
+                es: '¿Es este tu termómetro?',
+                hint: 'Is + Demonstrative + possessive + Equipment + ?'
+            },
+            {
+                id: 's12', type: 'interrogative', category: 'Health Care Professions',
+                words: ['Is', 'that', 'her', 'Patient?'],
+                es: '¿Es aquel su paciente?',
+                hint: 'Is + That + her + Profession + ?'
+            },
+            {
+                id: 's13', type: 'interrogative', category: 'Medical Equipment',
+                words: ['Are', 'these', 'their', 'intravenous', 'lines?'],
+                es: '¿Son estas sus líneas intravenosas (vías IV)?',
+                hint: 'Are + These + their + Equipment (Plural) + ?'
+            },
+            {
+                id: 's14', type: 'interrogative', category: 'Parts of the Body',
+                words: ['Are', 'those', 'his', 'shoulders?'],
+                es: '¿Son aquéllos sus hombros?',
+                hint: 'Are + Those + his + Body Part (Plural) + ?'
+            },
+            {
+                id: 's15', type: 'interrogative', category: 'Health Care Professions',
+                words: ['Is', 'this', 'our', 'Relative', '/', 'Family', 'member?'],
+                es: '¿Es este nuestro familiar?',
+                hint: 'Is + This + our + Relative + ?'
+            }
+        ];
+
+        /* Dialogues Dataset */
+        const DIALOGUES_DATA = [
+            {
+                title: "Escenario 1: Triaje de Urgencias",
+                speaker1: "Doctor",
+                speaker2: "Nurse",
+                lines: [
+                    { speaker: 1, text: "Good morning. ____ (This/These) is my stethoscope.", fill: "This" },
+                    { speaker: 2, text: "Yes, Doctor. ____ (Are/Is) those your blood pressure cuffs on the tray?", fill: "Are" },
+                    { speaker: 1, text: "No, they ____ (are not / is not) mine. They are her equipment.", fill: "are not" }
+                ]
+            },
+            {
+                title: "Escenario 2: Examen Físico de Paciente",
+                speaker1: "Registered Nurse",
+                speaker2: "Family Member",
+                lines: [
+                    { speaker: 1, text: "Hello! ____ (Is/Are) this your relative in bed 3?", fill: "Is" },
+                    { speaker: 2, text: "Yes, she is ____ (my/their) mother. Her forehead feels warm.", fill: "my" },
+                    { speaker: 1, text: "Let me check. ____ (Her/His) intravenous line is working fine.", fill: "Her" }
+                ]
+            }
+        ];
+
+        let currentTab = 'scramble';
+        let isAudioEnabled = true;
+        let score = 0;
+        let streak = 0;
+
+        // Scramble Game state
+        let scrambleFilter = 'all';
+        let scrambleList = [...SCRAMBLE_BANK];
+        let currentScrambleIdx = 0;
+        let selectedWords = [];
+        let availableTiles = [];
+
+        // Workbench state
+        let builderType = 'affirmative';
+
+        window.onload = function() {
+            initScrambleModule();
+            populateBuilderSelects();
+            renderVocabCards(VOCAB_DATA);
+            renderDialogues();
+            updateBuilderResult();
+        };
+
+        function speakText(text) {
+            if (!isAudioEnabled) return;
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const cleanText = text.replace(/[/]/g, ' or ');
+                const utterance = new SpeechSynthesisUtterance(cleanText);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.88;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function toggleGlobalAudio() {
+            isAudioEnabled = !isAudioEnabled;
+            const btn = document.getElementById('btn-audio-toggle');
+            if (isAudioEnabled) {
+                btn.innerHTML = '<i class="fa-solid fa-volume-high text-lg"></i>';
+                btn.classList.remove('text-rose-500');
+            } else {
+                btn.innerHTML = '<i class="fa-solid fa-volume-xmark text-lg text-rose-500"></i>';
+            }
+        }
+
+        function switchTab(tabId) {
+            currentTab = tabId;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+
+            ['scramble', 'builder', 'dictionary', 'dialogues'].forEach(id => {
+                document.getElementById(`section-${id}`).classList.add('hidden');
+            });
+            document.getElementById(`section-${tabId}`).classList.remove('hidden');
+        }
+
+        function openHelpModal() { document.getElementById('modal-help').classList.remove('hidden'); }
+        function closeHelpModal() { document.getElementById('modal-help').classList.add('hidden'); }
+
+        function initScrambleModule() {
+            if (scrambleFilter === 'all') {
+                scrambleList = [...SCRAMBLE_BANK];
+            } else {
+                scrambleList = SCRAMBLE_BANK.filter(s => s.type === scrambleFilter);
+            }
+            currentScrambleIdx = 0;
+            loadScrambleQuestion();
+        }
+
+        function setScrambleFilter(filter) {
+            scrambleFilter = filter;
+            document.querySelectorAll('.scramble-filter-btn').forEach(b => {
+                b.className = 'scramble-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition';
+            });
+            document.getElementById(`filter-scramble-${filter}`).className = 'scramble-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-medical-500 text-white transition';
+            initScrambleModule();
+        }
+
+        function loadScrambleQuestion() {
+            if (scrambleList.length === 0) return;
+            const q = scrambleList[currentScrambleIdx];
+
+            // Badges
+            const typeBadge = document.getElementById('scramble-type-badge');
+            if (q.type === 'affirmative') {
+                typeBadge.className = 'px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200';
+                typeBadge.textContent = 'Afirmativa (+)';
+            } else if (q.type === 'negative') {
+                typeBadge.className = 'px-3 py-1 rounded-full text-xs font-extrabold bg-rose-100 text-rose-800 border border-rose-200';
+                typeBadge.textContent = 'Negativa (-)';
+            } else {
+                typeBadge.className = 'px-3 py-1 rounded-full text-xs font-extrabold bg-amber-100 text-amber-800 border border-amber-200';
+                typeBadge.textContent = 'Interrogativa (?)';
+            }
+
+            document.getElementById('scramble-vocab-badge').textContent = q.category;
+            document.getElementById('scramble-progress-text').textContent = `Ejercicio ${currentScrambleIdx + 1} de ${scrambleList.length}`;
+            document.getElementById('scramble-translation-es').textContent = `"${q.es}"`;
+            document.getElementById('scramble-grammar-hint').innerHTML = `<i class="fa-solid fa-lightbulb text-amber-500"></i> ${q.hint}`;
+
+            // Reset UI
+            selectedWords = [];
+            document.getElementById('scramble-feedback-box').classList.add('hidden');
+            document.getElementById('btn-check-scramble').classList.remove('hidden');
+            document.getElementById('btn-next-scramble').classList.add('hidden');
+
+            // Shuffle words
+            availableTiles = [...q.words].map((word, idx) => ({ id: idx, text: word }));
+            shuffleArray(availableTiles);
+
+            renderScrambleTiles();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function renderScrambleTiles() {
+            const selectedContainer = document.getElementById('selected-tiles-container');
+            const bankContainer = document.getElementById('word-bank-container');
+
+            // Render Selected Slots
+            selectedContainer.innerHTML = '';
+            if (selectedWords.length === 0) {
+                selectedContainer.innerHTML = `<p id="empty-slot-placeholder" class="text-xs text-slate-400 w-full text-center py-2 italic">Haz clic en los bloques de palabras abajo para colocarlos aquí...</p>`;
+            } else {
+                selectedWords.forEach((tile, index) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'tile-btn bg-medical-500 hover:bg-medical-600 text-white font-bold px-3.5 py-2 rounded-xl text-sm shadow-sm flex items-center gap-1.5 border border-medical-600';
+                    btn.onclick = () => unselectTile(index);
+                    btn.innerHTML = `<span>${tile.text}</span> <i class="fa-solid fa-xmark text-xs opacity-70"></i>`;
+                    selectedContainer.appendChild(btn);
+                });
+            }
+
+            // Render Bank Tiles
+            bankContainer.innerHTML = '';
+            availableTiles.forEach((tile) => {
+                const btn = document.createElement('button');
+                btn.className = 'tile-btn bg-white hover:bg-slate-50 text-slate-800 font-bold px-4 py-2 rounded-xl text-sm border-2 border-slate-200 shadow-sm hover:border-medical-500';
+                btn.onclick = () => selectTile(tile);
+                btn.textContent = tile.text;
+                bankContainer.appendChild(btn);
+            });
+        }
+
+        function selectTile(tile) {
+            selectedWords.push(tile);
+            availableTiles = availableTiles.filter(t => t.id !== tile.id);
+            renderScrambleTiles();
+        }
+
+        function unselectTile(index) {
+            const tile = selectedWords[index];
+            selectedWords.splice(index, 1);
+            availableTiles.push(tile);
+            renderScrambleTiles();
+        }
+
+        function clearSelectedTiles() {
+            availableTiles = [...availableTiles, ...selectedWords];
+            selectedWords = [];
+            renderScrambleTiles();
+        }
+
+        function checkScrambleAnswer() {
+            const q = scrambleList[currentScrambleIdx];
+            const userSentence = selectedWords.map(w => w.text).join(' ');
+            const correctSentence = q.words.join(' ');
+
+            const fbBox = document.getElementById('scramble-feedback-box');
+            const fbIcon = document.getElementById('scramble-feedback-icon');
+            const fbText = document.getElementById('scramble-feedback-text');
+
+            fbBox.classList.remove('hidden');
+
+            if (userSentence === correctSentence) {
+                fbBox.className = 'p-4 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-900 text-sm font-bold flex items-center justify-between';
+                fbIcon.className = 'fa-solid fa-circle-check text-emerald-500 text-2xl';
+                fbText.textContent = '¡Excelente! Estructura gramatical ordenada correctamente.';
+
+                document.getElementById('btn-check-scramble').classList.add('hidden');
+                document.getElementById('btn-next-scramble').classList.remove('hidden');
+
+                addScore(15);
+                addStreak();
+                speakText(userSentence);
+
+                if (typeof confetti === 'function') {
+                    confetti({ particleCount: 35, spread: 60, origin: { y: 0.65 } });
+                }
+            } else {
+                fbBox.className = 'p-4 rounded-xl border border-rose-200 bg-rose-50 text-rose-900 text-sm font-bold flex items-center justify-between';
+                fbIcon.className = 'fa-solid fa-circle-xmark text-rose-500 text-2xl';
+                fbText.textContent = 'El orden aún no es correcto. ¡Inténtalo de nuevo!';
+                resetStreak();
+            }
+        }
+
+        function nextScrambleQuestion() {
+            currentScrambleIdx = (currentScrambleIdx + 1) % scrambleList.length;
+            loadScrambleQuestion();
+        }
+
+        function speakCurrentScramble() {
+            const q = scrambleList[currentScrambleIdx];
+            speakText(q.words.join(' '));
+        }
+
+        function toggleScrambleHintModal() {
+            openHelpModal();
+        }
+
+        function populateBuilderSelects() {
+            const vocabSelect = document.getElementById('build-vocab');
+            vocabSelect.innerHTML = '';
+
+            VOCAB_DATA.forEach(item => {
+                const opt = document.createElement('option');
+                opt.value = item.en;
+                opt.dataset.plural = item.plural;
+                opt.dataset.es = item.es;
+                opt.textContent = `${item.en} (${item.es})`;
+                vocabSelect.appendChild(opt);
+            });
+        }
+
+        function setBuilderType(type) {
+            builderType = type;
+            document.querySelectorAll('.stype-btn').forEach(btn => {
+                btn.className = 'stype-btn flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 transition';
+            });
+
+            if (type === 'affirmative') {
+                document.getElementById('stype-affirmative').className = 'stype-btn flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-700 font-bold text-sm transition';
+            } else if (type === 'negative') {
+                document.getElementById('stype-negative').className = 'stype-btn flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-rose-500 bg-rose-50 text-rose-700 font-bold text-sm transition';
+            } else if (type === 'interrogative') {
+                document.getElementById('stype-interrogative').className = 'stype-btn flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-amber-500 bg-amber-50 text-amber-700 font-bold text-sm transition';
+            }
+
+            updateBuilderResult();
+        }
+
+        function updateBuilderResult() {
+            const demoSelect = document.getElementById('build-demo');
+            const toBeSelect = document.getElementById('build-tobe');
+            const possSelect = document.getElementById('build-possessive');
+            const vocabSelect = document.getElementById('build-vocab');
+
+            const selectedDemoOpt = demoSelect.options[demoSelect.selectedIndex];
+            const isDemoPlural = selectedDemoOpt.dataset.plural === 'true';
+            const demoText = demoSelect.value;
+
+            toBeSelect.innerHTML = '';
+            if (builderType === 'affirmative') {
+                const opt = document.createElement('option');
+                opt.value = isDemoPlural ? 'are' : 'is';
+                opt.textContent = isDemoPlural ? 'are' : 'is';
+                toBeSelect.appendChild(opt);
+            } else if (builderType === 'negative') {
+                const opt = document.createElement('option');
+                opt.value = isDemoPlural ? 'are not' : 'is not';
+                opt.textContent = isDemoPlural ? 'are not (aren\'t)' : 'is not (isn\'t)';
+                toBeSelect.appendChild(opt);
+            } else if (builderType === 'interrogative') {
+                const opt = document.createElement('option');
+                opt.value = isDemoPlural ? 'Are' : 'Is';
+                opt.textContent = isDemoPlural ? 'Are' : 'Is';
+                toBeSelect.appendChild(opt);
+            }
+
+            const toBeText = toBeSelect.value;
+            const possText = possSelect.value;
+
+            const selectedVocabOpt = vocabSelect.options[vocabSelect.selectedIndex];
+            const vocabEn = selectedVocabOpt.value;
+            const vocabEs = selectedVocabOpt.dataset.es;
+            const isVocabPlural = selectedVocabOpt.dataset.plural === 'true';
+
+            let sentenceEn = "";
+            let sentenceEs = "";
+
+            if (builderType === 'interrogative') {
+                sentenceEn = `${toBeText} ${demoText.toLowerCase()} ${possText} ${vocabEn.toLowerCase()}?`;
+                sentenceEs = `¿Es/Son ${demoText.toLowerCase()} ${possText} ${vocabEs.toLowerCase()}?`;
+            } else if (builderType === 'negative') {
+                sentenceEn = `${demoText} ${toBeText} ${possText} ${vocabEn.toLowerCase()}.`;
+                sentenceEs = `${demoText} NO es/son ${possText} ${vocabEs.toLowerCase()}.`;
+            } else {
+                sentenceEn = `${demoText} ${toBeText} ${possText} ${vocabEn.toLowerCase()}.`;
+                sentenceEs = `${demoText} es/son ${possText} ${vocabEs.toLowerCase()}.`;
+            }
+
+            document.getElementById('builder-sentence-en').textContent = sentenceEn;
+            document.getElementById('builder-sentence-es').textContent = sentenceEs;
+
+            const validationBadge = document.getElementById('builder-validation');
+            if (isDemoPlural !== isVocabPlural) {
+                validationBadge.className = "inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30";
+                validationBadge.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Concordancia: ${demoText} (${isDemoPlural ? 'Plural' : 'Singular'}) con ${vocabEn} (${isVocabPlural ? 'Plural' : 'Singular'})`;
+            } else {
+                validationBadge.className = "inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+                validationBadge.innerHTML = `<i class="fa-solid fa-circle-check"></i> Concordancia Singular/Plural Correcta`;
+            }
+        }
+
+        function renderVocabCards(items) {
+            const container = document.getElementById('vocab-cards-grid');
+            container.innerHTML = '';
+
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'glass-card p-4 rounded-2xl border border-slate-200 hover:shadow-md transition group';
+                
+                const demoEn = item.plural ? `These are my ${item.en.toLowerCase()}.` : `This is her ${item.en.toLowerCase()}.`;
+                const demoEs = item.plural ? `Estos/as son mis ${item.es.toLowerCase()}.` : `Este/a es su ${item.es.toLowerCase()}.`;
+
+                card.innerHTML = `
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-medical-50 text-medical-600 flex items-center justify-center text-lg font-bold group-hover:bg-medical-500 group-hover:text-white transition">
+                                <i class="fa-solid ${item.icon}"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm">${item.en}</h4>
+                                <p class="text-xs text-slate-500">${item.es}</p>
+                            </div>
+                        </div>
+                        <button onclick="speakText('${item.en}')" class="text-slate-400 hover:text-medical-600 p-1.5 rounded-lg hover:bg-slate-100 transition" title="Escuchar">
+                            <i class="fa-solid fa-volume-high"></i>
+                        </button>
+                    </div>
+
+                    <div class="mt-3 pt-3 border-t border-slate-100 text-xs bg-slate-50 p-2.5 rounded-xl space-y-1">
+                        <div class="font-semibold text-medical-700 flex items-center justify-between">
+                            <span>${demoEn}</span>
+                            <button onclick="speakText('${demoEn}')" class="text-slate-400 hover:text-medical-600 text-[10px]">
+                                <i class="fa-solid fa-play"></i>
+                            </button>
+                        </div>
+                        <div class="text-slate-500 text-[11px] italic">${demoEs}</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterVocab(cat) {
+            document.querySelectorAll('.vocab-cat-btn').forEach(btn => {
+                btn.className = 'vocab-cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition';
+            });
+            document.getElementById(`vocab-cat-${cat}`).className = 'vocab-cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-medical-500 text-white transition';
+
+            if (cat === 'all') {
+                renderVocabCards(VOCAB_DATA);
+            } else {
+                renderVocabCards(VOCAB_DATA.filter(i => i.category === cat));
+            }
+        }
+
+        function searchVocab() {
+            const query = document.getElementById('vocab-search-input').value.toLowerCase();
+            const filtered = VOCAB_DATA.filter(i => 
+                i.en.toLowerCase().includes(query) || i.es.toLowerCase().includes(query)
+            );
+            renderVocabCards(filtered);
+        }
+
+        function renderDialogues() {
+            const container = document.getElementById('dialogues-container');
+            container.innerHTML = '';
+
+            DIALOGUES_DATA.forEach((dialogue, dIndex) => {
+                const box = document.createElement('div');
+                box.className = 'bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-4';
+                
+                let linesHTML = '';
+                dialogue.lines.forEach((line, lIndex) => {
+                    const speakerName = line.speaker === 1 ? dialogue.speaker1 : dialogue.speaker2;
+                    const isDoctor = line.speaker === 1;
+                    
+                    linesHTML += `
+                        <div class="space-y-1">
+                            <span class="text-xs font-bold ${isDoctor ? 'text-medical-600' : 'text-amber-600'} flex items-center gap-1">
+                                <i class="fa-solid ${isDoctor ? 'fa-user-doctor' : 'fa-user'}"></i> ${speakerName}:
+                            </span>
+                            <div class="bg-white p-3 rounded-xl border border-slate-200 text-sm text-slate-800">
+                                ${line.text.replace('____', `
+                                    <input type="text" data-ans="${line.fill}" id="d-input-${dIndex}-${lIndex}" 
+                                    class="w-24 px-2 py-0.5 border border-slate-300 rounded text-center font-bold text-medical-600 focus:outline-none focus:ring-2 focus:ring-medical-500" 
+                                    placeholder="?" />
+                                `)}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                box.innerHTML = `
+                    <h3 class="font-bold text-slate-900 text-sm border-b pb-2 flex items-center justify-between">
+                        <span>${dialogue.title}</span>
+                        <button onclick="checkDialogue(${dIndex})" class="bg-purple-600 hover:bg-purple-700 text-white text-xs px-3 py-1 rounded-lg font-bold transition">
+                            Verificar
+                        </button>
+                    </h3>
+                    <div class="space-y-3">${linesHTML}</div>
+                    <div id="d-feedback-${dIndex}" class="text-xs font-bold hidden"></div>
+                `;
+                container.appendChild(box);
+            });
+        }
+
+        function checkDialogue(dIndex) {
+            const dialogue = DIALOGUES_DATA[dIndex];
+            let allCorrect = true;
+
+            dialogue.lines.forEach((line, lIndex) => {
+                const input = document.getElementById(`d-input-${dIndex}-${lIndex}`);
+                const val = input.value.trim().toLowerCase();
+                const expected = line.fill.toLowerCase();
+
+                if (val === expected) {
+                    input.classList.remove('border-slate-300', 'border-rose-500');
+                    input.classList.add('border-emerald-500', 'bg-emerald-50');
+                } else {
+                    input.classList.remove('border-slate-300', 'border-emerald-500');
+                    input.classList.add('border-rose-500', 'bg-rose-50');
+                    allCorrect = false;
+                }
+            });
+
+            const fb = document.getElementById(`d-feedback-${dIndex}`);
+            fb.classList.remove('hidden');
+            if (allCorrect) {
+                fb.className = 'text-xs font-bold text-emerald-600 mt-2';
+                fb.innerHTML = '<i class="fa-solid fa-circle-check"></i> ¡Excelente! Diálogo completado correctamente.';
+                addScore(20);
+                if (typeof confetti === 'function') confetti({ particleCount: 30, spread: 60, origin: { y: 0.7 } });
+            } else {
+                fb.className = 'text-xs font-bold text-rose-600 mt-2';
+                fb.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Revisa las respuestas marcadas en rojo.';
+            }
+        }
