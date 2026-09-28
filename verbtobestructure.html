@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MediGrammar: Medical English Sentence Scramble</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -53,122 +53,122 @@
             box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.3);
         }
         .tile-btn {
-            transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s ease, border-color 0.15s ease;
             user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
         .tile-btn:active {
-            transform: scale(0.94);
+            transform: scale(0.92);
         }
         .slot-target {
-            min-height: 68px;
+            min-height: 76px;
             background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
             background-size: 12px 12px;
         }
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+        /* Custom smooth scroll bar for horizontal tabs */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
         }
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+        /* Touch friendly sizing */
+        @media (max-width: 640px) {
+            input, select, button {
+                font-size: 16px !important; /* Prevents iOS auto-zoom on input focus */
+            }
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between">
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between antialiased selection:bg-medical-500 selection:text-white">
 
-    <header class="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-14 sm:h-16 gap-2">
                 <!-- Logo -->
-                <div class="flex items-center gap-3">
-                    <div class="bg-medical-500 text-white p-2.5 rounded-xl shadow-md">
-                        <i class="fa-solid fa-stethoscope text-xl"></i>
+                <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+                    <div class="bg-medical-500 text-white p-2 rounded-xl shadow-md flex items-center justify-center">
+                        <i class="fa-solid fa-stethoscope text-lg sm:text-xl"></i>
                     </div>
                     <div>
-                        <h1 class="font-extrabold text-xl text-slate-900 leading-tight">MediGrammar</h1>
-                        <p class="text-xs text-medical-600 font-medium">To Be • Demonstratives • Possessives</p>
+                        <h1 class="font-extrabold text-base sm:text-xl text-slate-900 leading-tight">MediGrammar</h1>
+                        <p class="text-[10px] sm:text-xs text-medical-600 font-medium hidden xs:block">To Be • Demonstratives • Possessives</p>
                     </div>
                 </div>
 
                 <!-- Global Stats Badge -->
-                <div class="flex items-center gap-3 sm:gap-6 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200 text-xs sm:text-sm">
-                    <div class="flex items-center gap-1.5 text-amber-600 font-bold">
+                <div class="flex items-center gap-2 sm:gap-4 bg-slate-100 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full border border-slate-200 text-xs sm:text-sm">
+                    <div class="flex items-center gap-1 text-amber-600 font-extrabold">
                         <i class="fa-solid fa-fire text-amber-500"></i>
-                        <span id="streak-counter">0</span> <span class="text-xs text-slate-500 font-normal hidden sm:inline">Racha</span>
+                        <span id="streak-counter">0</span>
+                        <span class="text-[10px] text-slate-500 font-normal hidden sm:inline">Racha</span>
                     </div>
-                    <div class="h-4 w-[1px] bg-slate-300"></div>
-                    <div class="flex items-center gap-1.5 text-emerald-600 font-bold">
+                    <div class="h-3.5 w-[1px] bg-slate-300"></div>
+                    <div class="flex items-center gap-1 text-emerald-600 font-extrabold">
                         <i class="fa-solid fa-star text-amber-400"></i>
-                        <span id="score-counter">0</span> <span class="text-xs text-slate-500 font-normal hidden sm:inline">Pts</span>
+                        <span id="score-counter">0</span>
+                        <span class="text-[10px] text-slate-500 font-normal hidden sm:inline">Pts</span>
                     </div>
                 </div>
 
                 <!-- Control Buttons -->
-                <div class="flex items-center gap-2">
-                    <button id="btn-audio-toggle" onclick="toggleGlobalAudio()" class="p-2 text-slate-600 hover:text-medical-600 hover:bg-slate-100 rounded-lg transition" title="Activar/Desactivar Sonido">
-                        <i class="fa-solid fa-volume-high text-lg"></i>
+                <div class="flex items-center gap-1 sm:gap-2">
+                    <button id="btn-audio-toggle" onclick="toggleGlobalAudio()" class="p-2 text-slate-600 hover:text-medical-600 hover:bg-slate-100 active:bg-slate-200 rounded-lg transition" title="Activar/Desactivar Sonido" aria-label="Sonido">
+                        <i class="fa-solid fa-volume-high text-base sm:text-lg"></i>
                     </button>
-                    <button onclick="openHelpModal()" class="p-2 text-slate-600 hover:text-medical-600 hover:bg-slate-100 rounded-lg transition" title="Guía Gramatical">
-                        <i class="fa-solid fa-graduation-cap text-lg"></i>
+                    <button onclick="openHelpModal()" class="p-2 text-slate-600 hover:text-medical-600 hover:bg-slate-100 active:bg-slate-200 rounded-lg transition" title="Guía Gramatical" aria-label="Ayuda">
+                        <i class="fa-solid fa-graduation-cap text-base sm:text-lg"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- Navigation Tabs -->
-            <nav class="flex gap-2 overflow-x-auto pb-2 pt-1 text-xs sm:text-sm font-semibold">
-                <button onclick="switchTab('scramble')" id="tab-scramble" class="tab-btn active flex items-center gap-2 px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 transition whitespace-nowrap">
-                    <i class="fa-solid fa-puzzle-piece text-amber-500"></i> 1. Scramble Sentence
+            <nav class="flex gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar -mx-3 px-3 sm:mx-0 sm:px-0 pb-2 pt-1 text-xs font-semibold scroll-smooth">
+                <button onclick="switchTab('scramble')" id="tab-scramble" class="tab-btn active flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-slate-600 hover:bg-slate-100 transition whitespace-nowrap">
+                    <i class="fa-solid fa-puzzle-piece text-amber-500"></i> 1. Scramble
                 </button>
-                <button onclick="switchTab('builder')" id="tab-builder" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 transition whitespace-nowrap">
-                    <i class="fa-solid fa-sliders text-medical-500"></i> 2. Constructor Gramatical
+                <button onclick="switchTab('builder')" id="tab-builder" class="tab-btn flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-slate-600 hover:bg-slate-100 transition whitespace-nowrap">
+                    <i class="fa-solid fa-sliders text-medical-500"></i> 2. Constructor
                 </button>
-                <button onclick="switchTab('dictionary')" id="tab-dictionary" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 transition whitespace-nowrap">
-                    <i class="fa-solid fa-book-medical text-emerald-500"></i> 3. Diccionario Vocabulario
+                <button onclick="switchTab('dictionary')" id="tab-dictionary" class="tab-btn flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-slate-600 hover:bg-slate-100 transition whitespace-nowrap">
+                    <i class="fa-solid fa-book-medical text-emerald-500"></i> 3. Diccionario
                 </button>
-                <button onclick="switchTab('dialogues')" id="tab-dialogues" class="tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 transition whitespace-nowrap">
-                    <i class="fa-solid fa-comments text-purple-500"></i> 4. Diálogos Clínicos
+                <button onclick="switchTab('dialogues')" id="tab-dialogues" class="tab-btn flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-slate-600 hover:bg-slate-100 transition whitespace-nowrap">
+                    <i class="fa-solid fa-comments text-purple-500"></i> 4. Diálogos
                 </button>
             </nav>
         </div>
     </header>
 
-    <!-- Main Content Area -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+    <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 flex-grow w-full">
 
-        <section id="section-scramble" class="space-y-6">
-            <!-- Scramble Control Banner -->
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <!-- SECTION 1: SENTENCE SCRAMBLE -->
+        <section id="section-scramble" class="space-y-4 sm:space-y-6">
+            <!-- Scramble Header Banner -->
+            <div class="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
                 <div>
-                    <span class="text-xs font-extrabold text-medical-600 uppercase tracking-wider">Práctica Interactiva</span>
-                    <h2 class="text-2xl font-extrabold text-slate-900">Sentence Scramble: Verbo To Be en Salud</h2>
-                    <p class="text-xs sm:text-sm text-slate-500 mt-1">Ordena las palabras para formar la oración correcta según la estructura solicitada.</p>
+                    <span class="text-[10px] sm:text-xs font-extrabold text-medical-600 uppercase tracking-wider">Práctica Interactiva</span>
+                    <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 leading-tight">Sentence Scramble: Verbo To Be</h2>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Ordena las palabras tocándolas para formar la oración correcta.</p>
                 </div>
 
-                <!-- Filter Mode Selector -->
-                <div class="flex flex-wrap gap-2">
-                    <button onclick="setScrambleFilter('all')" id="filter-scramble-all" class="scramble-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-medical-500 text-white transition">Todas</button>
-                    <button onclick="setScrambleFilter('affirmative')" id="filter-scramble-affirmative" class="scramble-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Afirmativas (+)</button>
-                    <button onclick="setScrambleFilter('negative')" id="filter-scramble-negative" class="scramble-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Negativas (-)</button>
-                    <button onclick="setScrambleFilter('interrogative')" id="filter-scramble-interrogative" class="scramble-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Interrogativas (?)</button>
+                <div class="flex flex-wrap gap-1.5 sm:gap-2">
+                    <button onclick="setScrambleFilter('all')" id="filter-scramble-all" class="scramble-filter-btn px-2.5 py-1.5 rounded-xl text-xs font-bold bg-medical-500 text-white transition">Todas</button>
+                    <button onclick="setScrambleFilter('affirmative')" id="filter-scramble-affirmative" class="scramble-filter-btn px-2.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Afirmativas (+)</button>
+                    <button onclick="setScrambleFilter('negative')" id="filter-scramble-negative" class="scramble-filter-btn px-2.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Negativas (-)</button>
+                    <button onclick="setScrambleFilter('interrogative')" id="filter-scramble-interrogative" class="scramble-filter-btn px-2.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Interrogativas (?)</button>
                 </div>
             </div>
 
-            <!-- Scramble Challenge Card -->
-            <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6 max-w-4xl mx-auto relative">
+            <div class="bg-white p-4 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4 sm:space-y-6 max-w-4xl mx-auto relative">
                 <!-- Card Header Info -->
-                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
-                    <div class="flex items-center gap-3">
-                        <span id="scramble-type-badge" class="px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3 sm:pb-4">
+                    <div class="flex items-center gap-2">
+                        <span id="scramble-type-badge" class="px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200">
                             Afirmativa (+)
                         </span>
-                        <span id="scramble-vocab-badge" class="px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
+                        <span id="scramble-vocab-badge" class="px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-semibold bg-purple-100 text-purple-800 truncate max-w-[150px] sm:max-w-none">
                             Medical Equipment
                         </span>
                     </div>
@@ -178,59 +178,58 @@
                 </div>
 
                 <!-- Target Meaning / Spanish Hint -->
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <div class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">Traducción Objetivo:</div>
-                    <div class="text-lg font-bold text-slate-800 italic" id="scramble-translation-es">
+                <div class="bg-slate-50 p-3.5 sm:p-4 rounded-xl border border-slate-200">
+                    <div class="text-[10px] sm:text-xs text-slate-400 uppercase font-extrabold tracking-wider mb-1">Traducción Objetivo:</div>
+                    <div class="text-base sm:text-xl font-bold text-slate-800 italic" id="scramble-translation-es">
                         "Este es mi estetoscopio."
                     </div>
-                    <div class="text-xs text-medical-600 mt-2 flex items-center gap-1 font-medium" id="scramble-grammar-hint">
-                        <i class="fa-solid fa-lightbulb text-amber-500"></i> Estructura: Demonstrative + Verb To Be + Possessive + Medical Equipment
+                    <div class="text-xs text-medical-600 mt-2 flex items-start gap-1 font-medium leading-snug" id="scramble-grammar-hint">
+                        <i class="fa-solid fa-lightbulb text-amber-500 mt-0.5 shrink-0"></i> <span>Estructura: Demonstrative + Verb To Be + Possessive + Medical Equipment</span>
                     </div>
                 </div>
 
                 <!-- Drop Target Area (Selected Words) -->
                 <div>
                     <div class="flex items-center justify-between mb-2">
-                        <label class="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Tu Oración (Haz clic en las palabras abajo para construírla):</label>
-                        <button onclick="clearSelectedTiles()" class="text-xs text-slate-400 hover:text-rose-600 transition flex items-center gap-1">
+                        <label class="text-[11px] sm:text-xs font-extrabold text-slate-500 uppercase tracking-wider">Tu Oración Construida:</label>
+                        <button onclick="clearSelectedTiles()" class="text-xs text-slate-400 hover:text-rose-600 active:text-rose-700 transition flex items-center gap-1 py-1 px-2">
                             <i class="fa-solid fa-rotate-left"></i> Limpiar
                         </button>
                     </div>
-                    <div id="selected-tiles-container" class="slot-target p-3 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 flex flex-wrap gap-2 items-center">
-                        <p id="empty-slot-placeholder" class="text-xs text-slate-400 w-full text-center py-2 italic">Haz clic en los bloques para colocarlos en orden aquí...</p>
+                    <div id="selected-tiles-container" class="slot-target p-2.5 sm:p-3.5 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 flex flex-wrap gap-2 items-center min-h-[80px]">
+                        <p id="empty-slot-placeholder" class="text-xs text-slate-400 w-full text-center py-2 italic">Toca los bloques de palabras para agregarlos aquí...</p>
                     </div>
                 </div>
 
                 <!-- Word Bank Area (Available Tiles) -->
                 <div>
-                    <label class="block text-xs font-extrabold text-slate-500 uppercase tracking-wider mb-2">Banco de Palabras:</label>
-                    <div id="word-bank-container" class="p-4 rounded-2xl bg-slate-100 border border-slate-200 flex flex-wrap gap-2.5 items-center justify-center min-h-[80px]">
+                    <label class="block text-[11px] sm:text-xs font-extrabold text-slate-500 uppercase tracking-wider mb-2">Banco de Palabras Disponibles:</label>
+                    <div id="word-bank-container" class="p-3 sm:p-4 rounded-2xl bg-slate-100 border border-slate-200 flex flex-wrap gap-2 sm:gap-2.5 items-center justify-center min-h-[80px]">
                         <!-- Dynamic tiles insertion -->
                     </div>
                 </div>
 
                 <!-- Feedback Message -->
-                <div id="scramble-feedback-box" class="hidden p-4 rounded-xl text-sm font-semibold flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <i id="scramble-feedback-icon" class="text-xl"></i>
+                <div id="scramble-feedback-box" class="hidden p-3.5 sm:p-4 rounded-xl text-xs sm:text-sm font-semibold flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-2.5">
+                        <i id="scramble-feedback-icon" class="text-xl sm:text-2xl shrink-0"></i>
                         <span id="scramble-feedback-text"></span>
                     </div>
-                    <button onclick="speakCurrentScramble()" class="text-xs bg-white/50 hover:bg-white px-3 py-1.5 rounded-lg border flex items-center gap-1 text-slate-700 transition">
-                        <i class="fa-solid fa-volume-high"></i> Escuchar
+                    <button onclick="speakCurrentScramble()" class="text-xs bg-white/60 hover:bg-white active:bg-white px-2.5 py-1.5 rounded-lg border flex items-center gap-1 text-slate-700 transition shrink-0">
+                        <i class="fa-solid fa-volume-high"></i> <span class="hidden sm:inline">Escuchar</span>
                     </button>
                 </div>
 
-                <!-- Action Controls Bar -->
-                <div class="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
-                    <button onclick="toggleScrambleHintModal()" class="text-xs text-slate-500 hover:text-medical-600 font-bold flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 transition">
-                        <i class="fa-solid fa-circle-question text-amber-500"></i> Pista Gramatical
+                <div class="pt-3 sm:pt-4 border-t border-slate-100 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-3">
+                    <button onclick="toggleScrambleHintModal()" class="w-full sm:w-auto text-xs text-slate-600 hover:text-medical-600 font-bold flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 active:bg-slate-300 transition">
+                        <i class="fa-solid fa-circle-question text-amber-500"></i> Guía / Pista Gramatical
                     </button>
 
-                    <div class="flex items-center gap-3">
-                        <button onclick="checkScrambleAnswer()" id="btn-check-scramble" class="bg-medical-500 hover:bg-medical-600 text-white font-bold px-6 py-2.5 rounded-xl shadow-md transition flex items-center gap-2 text-sm">
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <button onclick="checkScrambleAnswer()" id="btn-check-scramble" class="w-full sm:w-auto bg-medical-500 hover:bg-medical-600 active:bg-medical-700 text-white font-bold px-6 py-3 sm:py-2.5 rounded-xl shadow-md transition flex items-center justify-center gap-2 text-sm min-h-[44px]">
                             <i class="fa-solid fa-circle-check"></i> Verificar Oración
                         </button>
-                        <button onclick="nextScrambleQuestion()" id="btn-next-scramble" class="hidden bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-2.5 rounded-xl shadow-md transition flex items-center gap-2 text-sm">
+                        <button onclick="nextScrambleQuestion()" id="btn-next-scramble" class="hidden w-full sm:w-auto bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-white font-bold px-6 py-3 sm:py-2.5 rounded-xl shadow-md transition flex items-center justify-center gap-2 text-sm min-h-[44px]">
                             Siguiente <i class="fa-solid fa-arrow-right"></i>
                         </button>
                     </div>
@@ -238,34 +237,35 @@
             </div>
         </section>
 
-        <section id="section-builder" class="hidden space-y-6">
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-                <div class="border-b border-slate-100 pb-4">
-                    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-                        <i class="fa-solid fa-sliders text-medical-500"></i> Constructor de Oraciones & Scrambler Personalizado
+        <!-- SECTION 2: CONSTRUCTOR GRAMATICAL -->
+        <section id="section-builder" class="hidden space-y-4 sm:space-y-6">
+            <div class="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 sm:space-y-6">
+                <div class="border-b border-slate-100 pb-3 sm:pb-4">
+                    <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-medical-500"></i> Constructor Gramatical Personalizado
                     </h2>
-                    <p class="text-sm text-slate-500 mt-1">Selecciona los componentes para explorar concordancia o generar un ejercicio Scramble a medida.</p>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-1">Selecciona los componentes para explorar concordancia y estructura de la oración.</p>
                 </div>
 
-                <!-- Type Selector -->
-                <div class="flex flex-wrap gap-3 justify-center">
-                    <button onclick="setBuilderType('affirmative')" id="stype-affirmative" class="stype-btn flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-700 font-bold text-sm transition">
-                        <i class="fa-solid fa-plus-circle"></i> Afirmativa (+)
+                <!-- Sentence Type Selector -->
+                <div class="grid grid-cols-3 gap-1.5 sm:flex sm:flex-wrap sm:gap-3 justify-center">
+                    <button onclick="setBuilderType('affirmative')" id="stype-affirmative" class="stype-btn flex items-center justify-center gap-1.5 px-2.5 sm:px-5 py-2.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-700 font-bold text-xs sm:text-sm transition">
+                        <i class="fa-solid fa-plus-circle"></i> <span class="hidden xs:inline">Afirmativa</span> (+)
                     </button>
-                    <button onclick="setBuilderType('negative')" id="stype-negative" class="stype-btn flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 transition">
-                        <i class="fa-solid fa-minus-circle"></i> Negativa (-)
+                    <button onclick="setBuilderType('negative')" id="stype-negative" class="stype-btn flex items-center justify-center gap-1.5 px-2.5 sm:px-5 py-2.5 rounded-xl border-2 border-slate-200 text-slate-600 font-bold text-xs sm:text-sm hover:bg-slate-50 transition">
+                        <i class="fa-solid fa-minus-circle"></i> <span class="hidden xs:inline">Negativa</span> (-)
                     </button>
-                    <button onclick="setBuilderType('interrogative')" id="stype-interrogative" class="stype-btn flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 transition">
-                        <i class="fa-solid fa-question-circle"></i> Interrogativa (?)
+                    <button onclick="setBuilderType('interrogative')" id="stype-interrogative" class="stype-btn flex items-center justify-center gap-1.5 px-2.5 sm:px-5 py-2.5 rounded-xl border-2 border-slate-200 text-slate-600 font-bold text-xs sm:text-sm hover:bg-slate-50 transition">
+                        <i class="fa-solid fa-question-circle"></i> <span class="hidden xs:inline">Interrogativa</span> (?)
                     </button>
                 </div>
 
                 <!-- Dropdown Selectors Grid -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 bg-slate-50 p-3.5 sm:p-6 rounded-2xl border border-slate-200">
                     <!-- Demonstrative -->
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">1. Demonstrative</label>
-                        <select id="build-demo" onchange="updateBuilderResult()" class="w-full p-3 rounded-xl border border-slate-300 bg-white font-semibold text-slate-800 focus:ring-2 focus:ring-medical-500 text-sm">
+                        <label class="block text-[11px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">1. Demonstrative</label>
+                        <select id="build-demo" onchange="updateBuilderResult()" class="w-full p-2.5 sm:p-3 rounded-xl border border-slate-300 bg-white font-semibold text-slate-800 focus:ring-2 focus:ring-medical-500 text-xs sm:text-sm min-h-[44px]">
                             <option value="This" data-plural="false">This (Este/Esta - Cerca)</option>
                             <option value="That" data-plural="false">That (Aquel/Esa - Lejos)</option>
                             <option value="These" data-plural="true">These (Estos/Estas - Cerca)</option>
@@ -275,16 +275,16 @@
 
                     <!-- Verb To Be -->
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">2. Verb To Be</label>
-                        <select id="build-tobe" onchange="updateBuilderResult()" class="w-full p-3 rounded-xl border border-slate-300 bg-white font-bold text-medical-600 focus:ring-2 focus:ring-medical-500 text-sm">
+                        <label class="block text-[11px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">2. Verb To Be</label>
+                        <select id="build-tobe" onchange="updateBuilderResult()" class="w-full p-2.5 sm:p-3 rounded-xl border border-slate-300 bg-white font-bold text-medical-600 focus:ring-2 focus:ring-medical-500 text-xs sm:text-sm min-h-[44px]">
                             <!-- Populated dynamically -->
                         </select>
                     </div>
 
                     <!-- Possessive Adjective -->
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">3. Possessive Adjective</label>
-                        <select id="build-possessive" onchange="updateBuilderResult()" class="w-full p-3 rounded-xl border border-slate-300 bg-white font-semibold text-purple-700 focus:ring-2 focus:ring-purple-500 text-sm">
+                        <label class="block text-[11px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">3. Possessive Adjective</label>
+                        <select id="build-possessive" onchange="updateBuilderResult()" class="w-full p-2.5 sm:p-3 rounded-xl border border-slate-300 bg-white font-semibold text-purple-700 focus:ring-2 focus:ring-purple-500 text-xs sm:text-sm min-h-[44px]">
                             <option value="my">my (mi / mis)</option>
                             <option value="your">your (tu / tus)</option>
                             <option value="his">his (su de él)</option>
@@ -297,45 +297,46 @@
 
                     <!-- Target Vocabulary -->
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">4. Término Médico</label>
-                        <select id="build-vocab" onchange="updateBuilderResult()" class="w-full p-3 rounded-xl border border-slate-300 bg-white font-semibold text-slate-800 focus:ring-2 focus:ring-medical-500 text-sm">
+                        <label class="block text-[11px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">4. Término Médico</label>
+                        <select id="build-vocab" onchange="updateBuilderResult()" class="w-full p-2.5 sm:p-3 rounded-xl border border-slate-300 bg-white font-semibold text-slate-800 focus:ring-2 focus:ring-medical-500 text-xs sm:text-sm min-h-[44px]">
                             <!-- Populated via JS -->
                         </select>
                     </div>
                 </div>
 
                 <!-- Generated Sentence Display Card -->
-                <div class="bg-medical-900 text-white p-6 rounded-2xl shadow-lg space-y-4">
+                <div class="bg-medical-900 text-white p-4 sm:p-6 rounded-2xl shadow-lg space-y-3 sm:space-y-4">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs uppercase font-bold tracking-wider text-medical-300">Oración Formada</span>
-                        <button onclick="speakText(document.getElementById('builder-sentence-en').textContent)" class="text-xs bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg flex items-center gap-2 transition text-white">
-                            <i class="fa-solid fa-volume-high text-medical-300"></i> Escuchar Pronunciación
+                        <span class="text-[10px] sm:text-xs uppercase font-bold tracking-wider text-medical-300">Oración Formada</span>
+                        <button onclick="speakText(document.getElementById('builder-sentence-en').textContent)" class="text-xs bg-white/10 hover:bg-white/20 active:bg-white/30 px-2.5 py-1 rounded-lg flex items-center gap-1.5 transition text-white">
+                            <i class="fa-solid fa-volume-high text-medical-300"></i> <span class="hidden xs:inline">Escuchar Pronunciación</span>
                         </button>
                     </div>
 
                     <div>
-                        <div class="text-2xl sm:text-3xl font-extrabold text-white tracking-wide" id="builder-sentence-en">
+                        <div class="text-xl sm:text-3xl font-extrabold text-white tracking-wide leading-tight break-words" id="builder-sentence-en">
                             This is my stethoscope.
                         </div>
-                        <div class="text-sm text-slate-300 font-medium italic mt-1" id="builder-sentence-es">
+                        <div class="text-xs sm:text-sm text-slate-300 font-medium italic mt-1" id="builder-sentence-es">
                             Este es mi estetoscopio.
                         </div>
                     </div>
 
-                    <div id="builder-validation" class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                    <div id="builder-validation" class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 leading-tight">
                         <i class="fa-solid fa-circle-check"></i> Concordancia Singular/Plural Correcta
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="section-dictionary" class="hidden space-y-6">
+        <!-- SECTION 3: DICCIONARIO & GUÍA DE VOCABULARIO -->
+        <section id="section-dictionary" class="hidden space-y-4 sm:space-y-6">
             <!-- Grammar Mini-Guide Bar -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                 <!-- To Be Box -->
-                <div class="glass-card p-4 rounded-2xl border-l-4 border-l-medical-500 shadow-sm">
-                    <div class="flex items-center justify-between mb-2">
-                        <h3 class="font-bold text-slate-900 flex items-center gap-2 text-sm">
+                <div class="glass-card p-3.5 sm:p-4 rounded-2xl border-l-4 border-l-medical-500 shadow-sm">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <h3 class="font-bold text-slate-900 flex items-center gap-2 text-xs sm:text-sm">
                             <i class="fa-solid fa-bolt text-medical-500"></i> Verbo To Be
                         </h3>
                         <span class="text-[10px] bg-medical-100 text-medical-700 px-2 py-0.5 rounded-full font-bold">Ser / Estar</span>
@@ -348,9 +349,9 @@
                 </div>
 
                 <!-- Demonstratives Box -->
-                <div class="glass-card p-4 rounded-2xl border-l-4 border-l-purple-500 shadow-sm">
-                    <div class="flex items-center justify-between mb-2">
-                        <h3 class="font-bold text-slate-900 flex items-center gap-2 text-sm">
+                <div class="glass-card p-3.5 sm:p-4 rounded-2xl border-l-4 border-l-purple-500 shadow-sm">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <h3 class="font-bold text-slate-900 flex items-center gap-2 text-xs sm:text-sm">
                             <i class="fa-solid fa-hand-pointer text-purple-500"></i> Demonstratives
                         </h3>
                         <span class="text-[10px] bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-bold">Ubicación</span>
@@ -370,71 +371,73 @@
                 </div>
 
                 <!-- Possessives Box -->
-                <div class="glass-card p-4 rounded-2xl border-l-4 border-l-emerald-500 shadow-sm">
-                    <div class="flex items-center justify-between mb-2">
-                        <h3 class="font-bold text-slate-900 flex items-center gap-2 text-sm">
+                <div class="glass-card p-3.5 sm:p-4 rounded-2xl border-l-4 border-l-emerald-500 shadow-sm">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <h3 class="font-bold text-slate-900 flex items-center gap-2 text-xs sm:text-sm">
                             <i class="fa-solid fa-user-tag text-emerald-500"></i> Possessives
                         </h3>
                         <span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-bold">Pertenencia</span>
                     </div>
                     <div class="text-xs flex flex-wrap gap-1 mt-1">
-                        <span class="bg-slate-100 px-2 py-0.5 rounded font-mono text-slate-800">my</span>
-                        <span class="bg-slate-100 px-2 py-0.5 rounded font-mono text-slate-800">your</span>
-                        <span class="bg-slate-100 px-2 py-0.5 rounded font-mono text-slate-800">his</span>
-                        <span class="bg-slate-100 px-2 py-0.5 rounded font-mono text-slate-800">her</span>
-                        <span class="bg-slate-100 px-2 py-0.5 rounded font-mono text-slate-800">its</span>
-                        <span class="bg-slate-100 px-2 py-0.5 rounded font-mono text-slate-800">our</span>
-                        <span class="bg-slate-100 px-2 py-0.5 rounded font-mono text-slate-800">their</span>
+                        <span class="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-slate-800">my</span>
+                        <span class="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-slate-800">your</span>
+                        <span class="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-slate-800">his</span>
+                        <span class="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-slate-800">her</span>
+                        <span class="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-slate-800">its</span>
+                        <span class="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-slate-800">our</span>
+                        <span class="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-slate-800">their</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Vocabulary Category Filter Buttons -->
-            <div class="flex flex-wrap items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-                <div class="flex flex-wrap gap-2">
-                    <button onclick="filterVocab('all')" id="vocab-cat-all" class="vocab-cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-medical-500 text-white transition">Todos (30)</button>
-                    <button onclick="filterVocab('professions')" id="vocab-cat-professions" class="vocab-cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Professions</button>
-                    <button onclick="filterVocab('equipment')" id="vocab-cat-equipment" class="vocab-cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Medical Equipment</button>
-                    <button onclick="filterVocab('body')" id="vocab-cat-body" class="vocab-cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Parts of the Body</button>
+            <!-- Vocabulary Category Filter & Search Bar -->
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-sm">
+                <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar -mx-1 px-1 py-0.5">
+                    <button onclick="filterVocab('all')" id="vocab-cat-all" class="vocab-cat-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold bg-medical-500 text-white transition">Todos (30)</button>
+                    <button onclick="filterVocab('professions')" id="vocab-cat-professions" class="vocab-cat-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Professions</button>
+                    <button onclick="filterVocab('equipment')" id="vocab-cat-equipment" class="vocab-cat-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Equipment</button>
+                    <button onclick="filterVocab('body')" id="vocab-cat-body" class="vocab-cat-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition">Body Parts</button>
                 </div>
                 <div class="relative w-full sm:w-64">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
-                    <input type="text" id="vocab-search-input" onkeyup="searchVocab()" placeholder="Buscar palabra o traducción..." class="w-full pl-9 pr-4 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-medical-500">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
+                    <input type="text" id="vocab-search-input" onkeyup="searchVocab()" placeholder="Buscar palabra o traducción..." class="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-medical-500 min-h-[40px]">
                 </div>
             </div>
 
             <!-- Grid of Cards -->
-            <div id="vocab-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div id="vocab-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 <!-- Dynamically populated -->
             </div>
         </section>
 
-        <section id="section-dialogues" class="hidden space-y-6">
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-                <div class="border-b border-slate-100 pb-4">
-                    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+        <!-- SECTION 4: DIÁLOGOS CLÍNICOS -->
+        <section id="section-dialogues" class="hidden space-y-4 sm:space-y-6">
+            <div class="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 sm:space-y-6">
+                <div class="border-b border-slate-100 pb-3 sm:pb-4">
+                    <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
                         <i class="fa-solid fa-comments text-purple-500"></i> Diálogos en Entorno Clínico
                     </h2>
-                    <p class="text-sm text-slate-500 mt-1">Completa los vacíos en las conversaciones hospitalarias aplicando las estructuras aprendidas.</p>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-1">Completa los vacíos en las conversaciones hospitalarias aplicando las estructuras aprendidas.</p>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="dialogues-container">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6" id="dialogues-container">
                     <!-- Populated dynamically via JS -->
                 </div>
             </div>
         </section>
     </main>
 
-    <div id="modal-help" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+    <!-- Help Modal -->
+    <div id="modal-help" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl space-y-4 max-h-[85vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b pb-3">
-                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
-                    <i class="fa-solid fa-graduation-cap text-medical-500"></i> Guía Gramatical: To Be + Demonstratives + Possessives
+                <h3 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-graduation-cap text-medical-500"></i> Guía Gramatical Médica
                 </h3>
-                <button onclick="closeHelpModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
+                <button onclick="closeHelpModal()" class="p-1 text-slate-400 hover:text-slate-600 rounded-lg"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
             
-            <div class="space-y-4 text-xs sm:text-sm text-slate-600">
+            <div class="space-y-3 text-xs sm:text-sm text-slate-600">
                 <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
                     <h4 class="font-bold text-slate-900 mb-1">1. Formas del Verbo To Be:</h4>
                     <p>• <strong>Afirmativo (+):</strong> <em>This IS my thermometer. / These ARE our gloves.</em></p>
@@ -455,22 +458,22 @@
                 <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200">
                     <h4 class="font-bold text-emerald-900 mb-1">3. Adjetivos Posesivos (Possessive Adjectives):</h4>
                     <p>Expresan pertenencia antes del objeto o profesión:</p>
-                    <p class="font-mono text-slate-700 mt-1">my, your, his (él), her (ella), its (objeto), our (nosotros), their (ellos/ellas)</p>
+                    <p class="font-mono text-slate-700 mt-1">my, your, his, her, its, our, their</p>
                 </div>
             </div>
 
             <div class="text-right border-t pt-3">
-                <button onclick="closeHelpModal()" class="bg-medical-500 text-white font-bold text-xs px-5 py-2 rounded-xl">¡Entendido!</button>
+                <button onclick="closeHelpModal()" class="w-full sm:w-auto bg-medical-500 text-white font-bold text-xs px-6 py-2.5 rounded-xl min-h-[44px]">¡Entendido!</button>
             </div>
         </div>
     </div>
 
-    <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500 mt-auto">
-        <p>© 2026 MediGrammar Platform • Plataforma de Práctica Gramatical Médica en Inglés</p>
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-3 sm:py-4 text-center text-[11px] sm:text-xs text-slate-500 mt-auto px-4">
+        <p>© 2026 MediGrammar Platform • Plataforma Gramatical Médica en Inglés</p>
     </footer>
 
     <script>
-        /* Exact Vocabulary Dataset as specified by user */
         const VOCAB_DATA = [
             // Health Care Professions
             { id: 'p1', category: 'professions', en: 'Nursing Assistant', es: 'Auxiliar de Enfermería', icon: 'fa-user-nurse', plural: false },
@@ -509,7 +512,6 @@
             { id: 'b18', category: 'body', en: 'Feet', es: 'Pies (Plural)', icon: 'fa-shoe-prints', plural: true }
         ];
 
-        /* Comprehensive Scramble Sentence Bank integrating all target structures and vocabulary */
         const SCRAMBLE_BANK = [
             // Affirmative (+)
             {
@@ -608,7 +610,6 @@
             }
         ];
 
-        /* Dialogues Dataset */
         const DIALOGUES_DATA = [
             {
                 title: "Escenario 1: Triaje de Urgencias",
@@ -632,19 +633,20 @@
             }
         ];
 
+        /* Global Application State */
         let currentTab = 'scramble';
         let isAudioEnabled = true;
         let score = 0;
         let streak = 0;
 
-        // Scramble Game state
+        // Scramble state
         let scrambleFilter = 'all';
         let scrambleList = [...SCRAMBLE_BANK];
         let currentScrambleIdx = 0;
         let selectedWords = [];
         let availableTiles = [];
 
-        // Workbench state
+        // Builder state
         let builderType = 'affirmative';
 
         window.onload = function() {
@@ -671,10 +673,10 @@
             isAudioEnabled = !isAudioEnabled;
             const btn = document.getElementById('btn-audio-toggle');
             if (isAudioEnabled) {
-                btn.innerHTML = '<i class="fa-solid fa-volume-high text-lg"></i>';
+                btn.innerHTML = '<i class="fa-solid fa-volume-high text-base sm:text-lg"></i>';
                 btn.classList.remove('text-rose-500');
             } else {
-                btn.innerHTML = '<i class="fa-solid fa-volume-xmark text-lg text-rose-500"></i>';
+                btn.innerHTML = '<i class="fa-solid fa-volume-xmark text-base sm:text-lg text-rose-500"></i>';
             }
         }
 
@@ -687,6 +689,7 @@
                 document.getElementById(`section-${id}`).classList.add('hidden');
             });
             document.getElementById(`section-${tabId}`).classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function openHelpModal() { document.getElementById('modal-help').classList.remove('hidden'); }
@@ -705,9 +708,9 @@
         function setScrambleFilter(filter) {
             scrambleFilter = filter;
             document.querySelectorAll('.scramble-filter-btn').forEach(b => {
-                b.className = 'scramble-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition';
+                b.className = 'scramble-filter-btn px-2.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition';
             });
-            document.getElementById(`filter-scramble-${filter}`).className = 'scramble-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-medical-500 text-white transition';
+            document.getElementById(`filter-scramble-${filter}`).className = 'scramble-filter-btn px-2.5 py-1.5 rounded-xl text-xs font-bold bg-medical-500 text-white transition';
             initScrambleModule();
         }
 
@@ -718,20 +721,20 @@
             // Badges
             const typeBadge = document.getElementById('scramble-type-badge');
             if (q.type === 'affirmative') {
-                typeBadge.className = 'px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200';
+                typeBadge.className = 'px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200';
                 typeBadge.textContent = 'Afirmativa (+)';
             } else if (q.type === 'negative') {
-                typeBadge.className = 'px-3 py-1 rounded-full text-xs font-extrabold bg-rose-100 text-rose-800 border border-rose-200';
+                typeBadge.className = 'px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-extrabold bg-rose-100 text-rose-800 border border-rose-200';
                 typeBadge.textContent = 'Negativa (-)';
             } else {
-                typeBadge.className = 'px-3 py-1 rounded-full text-xs font-extrabold bg-amber-100 text-amber-800 border border-amber-200';
+                typeBadge.className = 'px-2.5 py-1 rounded-full text-[11px] sm:text-xs font-extrabold bg-amber-100 text-amber-800 border border-amber-200';
                 typeBadge.textContent = 'Interrogativa (?)';
             }
 
             document.getElementById('scramble-vocab-badge').textContent = q.category;
             document.getElementById('scramble-progress-text').textContent = `Ejercicio ${currentScrambleIdx + 1} de ${scrambleList.length}`;
             document.getElementById('scramble-translation-es').textContent = `"${q.es}"`;
-            document.getElementById('scramble-grammar-hint').innerHTML = `<i class="fa-solid fa-lightbulb text-amber-500"></i> ${q.hint}`;
+            document.getElementById('scramble-grammar-hint').innerHTML = `<i class="fa-solid fa-lightbulb text-amber-500 mt-0.5 shrink-0"></i> <span>${q.hint}</span>`;
 
             // Reset UI
             selectedWords = [];
@@ -760,11 +763,11 @@
             // Render Selected Slots
             selectedContainer.innerHTML = '';
             if (selectedWords.length === 0) {
-                selectedContainer.innerHTML = `<p id="empty-slot-placeholder" class="text-xs text-slate-400 w-full text-center py-2 italic">Haz clic en los bloques de palabras abajo para colocarlos aquí...</p>`;
+                selectedContainer.innerHTML = `<p id="empty-slot-placeholder" class="text-xs text-slate-400 w-full text-center py-2 italic">Toca los bloques de palabras abajo para colocarlos aquí...</p>`;
             } else {
                 selectedWords.forEach((tile, index) => {
                     const btn = document.createElement('button');
-                    btn.className = 'tile-btn bg-medical-500 hover:bg-medical-600 text-white font-bold px-3.5 py-2 rounded-xl text-sm shadow-sm flex items-center gap-1.5 border border-medical-600';
+                    btn.className = 'tile-btn bg-medical-500 hover:bg-medical-600 active:bg-medical-700 text-white font-bold px-3 py-2 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm shadow-sm flex items-center gap-1.5 border border-medical-600 min-h-[40px]';
                     btn.onclick = () => unselectTile(index);
                     btn.innerHTML = `<span>${tile.text}</span> <i class="fa-solid fa-xmark text-xs opacity-70"></i>`;
                     selectedContainer.appendChild(btn);
@@ -775,7 +778,7 @@
             bankContainer.innerHTML = '';
             availableTiles.forEach((tile) => {
                 const btn = document.createElement('button');
-                btn.className = 'tile-btn bg-white hover:bg-slate-50 text-slate-800 font-bold px-4 py-2 rounded-xl text-sm border-2 border-slate-200 shadow-sm hover:border-medical-500';
+                btn.className = 'tile-btn bg-white hover:bg-slate-50 active:bg-slate-100 text-slate-800 font-bold px-3.5 py-2.5 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm border-2 border-slate-200 shadow-sm hover:border-medical-500 min-h-[42px] min-w-[44px] flex items-center justify-center';
                 btn.onclick = () => selectTile(tile);
                 btn.textContent = tile.text;
                 bankContainer.appendChild(btn);
@@ -813,8 +816,8 @@
             fbBox.classList.remove('hidden');
 
             if (userSentence === correctSentence) {
-                fbBox.className = 'p-4 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-900 text-sm font-bold flex items-center justify-between';
-                fbIcon.className = 'fa-solid fa-circle-check text-emerald-500 text-2xl';
+                fbBox.className = 'p-3.5 sm:p-4 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-900 text-xs sm:text-sm font-bold flex items-center justify-between gap-2';
+                fbIcon.className = 'fa-solid fa-circle-check text-emerald-500 text-xl sm:text-2xl shrink-0';
                 fbText.textContent = '¡Excelente! Estructura gramatical ordenada correctamente.';
 
                 document.getElementById('btn-check-scramble').classList.add('hidden');
@@ -828,8 +831,8 @@
                     confetti({ particleCount: 35, spread: 60, origin: { y: 0.65 } });
                 }
             } else {
-                fbBox.className = 'p-4 rounded-xl border border-rose-200 bg-rose-50 text-rose-900 text-sm font-bold flex items-center justify-between';
-                fbIcon.className = 'fa-solid fa-circle-xmark text-rose-500 text-2xl';
+                fbBox.className = 'p-3.5 sm:p-4 rounded-xl border border-rose-200 bg-rose-50 text-rose-900 text-xs sm:text-sm font-bold flex items-center justify-between gap-2';
+                fbIcon.className = 'fa-solid fa-circle-xmark text-rose-500 text-xl sm:text-2xl shrink-0';
                 fbText.textContent = 'El orden aún no es correcto. ¡Inténtalo de nuevo!';
                 resetStreak();
             }
@@ -866,15 +869,15 @@
         function setBuilderType(type) {
             builderType = type;
             document.querySelectorAll('.stype-btn').forEach(btn => {
-                btn.className = 'stype-btn flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 transition';
+                btn.className = 'stype-btn flex items-center justify-center gap-1.5 px-2.5 sm:px-5 py-2.5 rounded-xl border-2 border-slate-200 text-slate-600 font-bold text-xs sm:text-sm hover:bg-slate-50 transition';
             });
 
             if (type === 'affirmative') {
-                document.getElementById('stype-affirmative').className = 'stype-btn flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-700 font-bold text-sm transition';
+                document.getElementById('stype-affirmative').className = 'stype-btn flex items-center justify-center gap-1.5 px-2.5 sm:px-5 py-2.5 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-700 font-bold text-xs sm:text-sm transition';
             } else if (type === 'negative') {
-                document.getElementById('stype-negative').className = 'stype-btn flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-rose-500 bg-rose-50 text-rose-700 font-bold text-sm transition';
+                document.getElementById('stype-negative').className = 'stype-btn flex items-center justify-center gap-1.5 px-2.5 sm:px-5 py-2.5 rounded-xl border-2 border-rose-500 bg-rose-50 text-rose-700 font-bold text-xs sm:text-sm transition';
             } else if (type === 'interrogative') {
-                document.getElementById('stype-interrogative').className = 'stype-btn flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-amber-500 bg-amber-50 text-amber-700 font-bold text-sm transition';
+                document.getElementById('stype-interrogative').className = 'stype-btn flex items-center justify-center gap-1.5 px-2.5 sm:px-5 py-2.5 rounded-xl border-2 border-amber-500 bg-amber-50 text-amber-700 font-bold text-xs sm:text-sm transition';
             }
 
             updateBuilderResult();
@@ -935,10 +938,10 @@
 
             const validationBadge = document.getElementById('builder-validation');
             if (isDemoPlural !== isVocabPlural) {
-                validationBadge.className = "inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30";
-                validationBadge.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Concordancia: ${demoText} (${isDemoPlural ? 'Plural' : 'Singular'}) con ${vocabEn} (${isVocabPlural ? 'Plural' : 'Singular'})`;
+                validationBadge.className = "inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 leading-tight";
+                validationBadge.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Concordancia: ${demoText} (${isDemoPlural ? 'Plural' : 'Singular'}) vs ${vocabEn} (${isVocabPlural ? 'Plural' : 'Singular'})`;
             } else {
-                validationBadge.className = "inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+                validationBadge.className = "inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 leading-tight";
                 validationBadge.innerHTML = `<i class="fa-solid fa-circle-check"></i> Concordancia Singular/Plural Correcta`;
             }
         }
@@ -949,7 +952,7 @@
 
             items.forEach(item => {
                 const card = document.createElement('div');
-                card.className = 'glass-card p-4 rounded-2xl border border-slate-200 hover:shadow-md transition group';
+                card.className = 'glass-card p-3.5 sm:p-4 rounded-2xl border border-slate-200 hover:shadow-md transition group';
                 
                 const demoEn = item.plural ? `These are my ${item.en.toLowerCase()}.` : `This is her ${item.en.toLowerCase()}.`;
                 const demoEs = item.plural ? `Estos/as son mis ${item.es.toLowerCase()}.` : `Este/a es su ${item.es.toLowerCase()}.`;
@@ -957,27 +960,27 @@
                 card.innerHTML = `
                     <div class="flex items-start justify-between">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-medical-50 text-medical-600 flex items-center justify-center text-lg font-bold group-hover:bg-medical-500 group-hover:text-white transition">
+                            <div class="w-10 h-10 rounded-xl bg-medical-50 text-medical-600 flex items-center justify-center text-base sm:text-lg font-bold group-hover:bg-medical-500 group-hover:text-white transition shrink-0">
                                 <i class="fa-solid ${item.icon}"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-slate-900 text-sm">${item.en}</h4>
-                                <p class="text-xs text-slate-500">${item.es}</p>
+                                <h4 class="font-bold text-slate-900 text-xs sm:text-sm leading-tight">${item.en}</h4>
+                                <p class="text-[11px] sm:text-xs text-slate-500">${item.es}</p>
                             </div>
                         </div>
-                        <button onclick="speakText('${item.en}')" class="text-slate-400 hover:text-medical-600 p-1.5 rounded-lg hover:bg-slate-100 transition" title="Escuchar">
+                        <button onclick="speakText('${item.en}')" class="text-slate-400 hover:text-medical-600 p-2 rounded-lg hover:bg-slate-100 transition shrink-0" title="Escuchar">
                             <i class="fa-solid fa-volume-high"></i>
                         </button>
                     </div>
 
-                    <div class="mt-3 pt-3 border-t border-slate-100 text-xs bg-slate-50 p-2.5 rounded-xl space-y-1">
-                        <div class="font-semibold text-medical-700 flex items-center justify-between">
-                            <span>${demoEn}</span>
-                            <button onclick="speakText('${demoEn}')" class="text-slate-400 hover:text-medical-600 text-[10px]">
+                    <div class="mt-2.5 pt-2.5 border-t border-slate-100 text-xs bg-slate-50 p-2 sm:p-2.5 rounded-xl space-y-1">
+                        <div class="font-semibold text-medical-700 flex items-center justify-between gap-1">
+                            <span class="truncate">${demoEn}</span>
+                            <button onclick="speakText('${demoEn}')" class="text-slate-400 hover:text-medical-600 text-[11px] p-1 shrink-0">
                                 <i class="fa-solid fa-play"></i>
                             </button>
                         </div>
-                        <div class="text-slate-500 text-[11px] italic">${demoEs}</div>
+                        <div class="text-slate-500 text-[10px] sm:text-[11px] italic truncate">${demoEs}</div>
                     </div>
                 `;
                 container.appendChild(card);
@@ -986,9 +989,9 @@
 
         function filterVocab(cat) {
             document.querySelectorAll('.vocab-cat-btn').forEach(btn => {
-                btn.className = 'vocab-cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition';
+                btn.className = 'vocab-cat-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition';
             });
-            document.getElementById(`vocab-cat-${cat}`).className = 'vocab-cat-btn px-4 py-2 rounded-xl text-xs font-bold bg-medical-500 text-white transition';
+            document.getElementById(`vocab-cat-${cat}`).className = 'vocab-cat-btn shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold bg-medical-500 text-white transition';
 
             if (cat === 'all') {
                 renderVocabCards(VOCAB_DATA);
@@ -1011,7 +1014,7 @@
 
             DIALOGUES_DATA.forEach((dialogue, dIndex) => {
                 const box = document.createElement('div');
-                box.className = 'bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-4';
+                box.className = 'bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200 space-y-3 sm:space-y-4';
                 
                 let linesHTML = '';
                 dialogue.lines.forEach((line, lIndex) => {
@@ -1020,14 +1023,14 @@
                     
                     linesHTML += `
                         <div class="space-y-1">
-                            <span class="text-xs font-bold ${isDoctor ? 'text-medical-600' : 'text-amber-600'} flex items-center gap-1">
+                            <span class="text-[11px] sm:text-xs font-bold ${isDoctor ? 'text-medical-600' : 'text-amber-600'} flex items-center gap-1">
                                 <i class="fa-solid ${isDoctor ? 'fa-user-doctor' : 'fa-user'}"></i> ${speakerName}:
                             </span>
-                            <div class="bg-white p-3 rounded-xl border border-slate-200 text-sm text-slate-800">
+                            <div class="bg-white p-2.5 sm:p-3 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 leading-relaxed">
                                 ${line.text.replace('____', `
                                     <input type="text" data-ans="${line.fill}" id="d-input-${dIndex}-${lIndex}" 
-                                    class="w-24 px-2 py-0.5 border border-slate-300 rounded text-center font-bold text-medical-600 focus:outline-none focus:ring-2 focus:ring-medical-500" 
-                                    placeholder="?" />
+                                    class="w-20 sm:w-24 px-2 py-0.5 border border-slate-300 rounded text-center font-bold text-medical-600 focus:outline-none focus:ring-2 focus:ring-medical-500 text-xs sm:text-sm inline-block my-0.5" 
+                                    placeholder="?" autocomplete="off" autocorrect="off" spellcheck="false" />
                                 `)}
                             </div>
                         </div>
@@ -1035,13 +1038,13 @@
                 });
 
                 box.innerHTML = `
-                    <h3 class="font-bold text-slate-900 text-sm border-b pb-2 flex items-center justify-between">
+                    <h3 class="font-bold text-slate-900 text-xs sm:text-sm border-b pb-2 flex items-center justify-between">
                         <span>${dialogue.title}</span>
-                        <button onclick="checkDialogue(${dIndex})" class="bg-purple-600 hover:bg-purple-700 text-white text-xs px-3 py-1 rounded-lg font-bold transition">
+                        <button onclick="checkDialogue(${dIndex})" class="bg-purple-600 hover:bg-purple-700 active:bg-purple-800 text-white text-xs px-3 py-1 rounded-lg font-bold transition min-h-[32px]">
                             Verificar
                         </button>
                     </h3>
-                    <div class="space-y-3">${linesHTML}</div>
+                    <div class="space-y-2.5">${linesHTML}</div>
                     <div id="d-feedback-${dIndex}" class="text-xs font-bold hidden"></div>
                 `;
                 container.appendChild(box);
@@ -1079,3 +1082,20 @@
                 fb.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Revisa las respuestas marcadas en rojo.';
             }
         }
+
+        /* Score & Streak helpers */
+        function addScore(pts) {
+            score += pts;
+            document.getElementById('score-counter').textContent = score;
+        }
+        function addStreak() {
+            streak++;
+            document.getElementById('streak-counter').textContent = streak;
+        }
+        function resetStreak() {
+            streak = 0;
+            document.getElementById('streak-counter').textContent = streak;
+        }
+    </script>
+</body>
+</html>
